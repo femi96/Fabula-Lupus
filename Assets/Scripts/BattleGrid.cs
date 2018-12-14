@@ -37,9 +37,16 @@ public class BattleGrid : MonoBehaviour {
           if (!tileDict.ContainsKey(t))
             continue;
 
-          n.AddNeighbor(tileDict[t], (n.GetPos() - tileDict[t].GetPos()).magnitude);
+          float w = (n.GetPos() - tileDict[t].GetPos()).magnitude;
+          w = Mathf.RoundToInt(w * 10) / 10f;
+          n.AddNeighbor(tileDict[t], w);
         }
       }
+    }
+
+    // Debug printing
+    foreach (KeyValuePair<Vector2Int, TileNode> entry in tileDict) {
+      Debug.Log(entry.Value);
     }
   }
 }
