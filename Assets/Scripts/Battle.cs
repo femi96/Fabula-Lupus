@@ -15,7 +15,7 @@ public class Battle : MonoBehaviour {
 
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
-        TileNode node = new TileNode(new Vector3(i, 0, j));
+        TileNode node = new TileNode(new Vector3(i, (i + j) / 10f, j));
         dict.Add(node.GetKey(), node);
       }
     }
@@ -35,7 +35,7 @@ public class Battle : MonoBehaviour {
           if (!dict.ContainsKey(t))
             continue;
 
-          n.AddNeighbor(dict[t], (k - t).magnitude);
+          n.AddNeighbor(dict[t], (n.GetPos() - dict[t].GetPos()).magnitude);
         }
       }
     }
