@@ -45,8 +45,10 @@ public class BattleGrid : MonoBehaviour {
     }
 
     // Debug printing
+    /*
     foreach (KeyValuePair<Vector2Int, TileNode> entry in tileDict) {
       Debug.Log(entry.Value);
     }
+    */
   }
 }
