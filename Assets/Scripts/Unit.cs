@@ -11,11 +11,36 @@ public class Unit {
   private string name;
   private Gender gender;
 
+  private int level;
+  private int exp;
   private Dictionary<Stat, int> stats;
   private List<UnitType> type;
 
   private List<Action> actions;
   private List<Passive> passives;
 
-  public Unit() {}
+  public Unit() {
+    name = "Boi";
+    gender = Gender.M;
+
+    level = 1;
+    exp = 0;
+
+    stats = new Dictionary<Stat, int>();
+    stats.Add(Stat.Con, 5);
+    stats.Add(Stat.Str, 5);
+    stats.Add(Stat.Agi, 5);
+    stats.Add(Stat.Rea, 5);
+    stats.Add(Stat.Mnd, 5);
+    stats.Add(Stat.Int, 5);
+    stats.Add(Stat.Wil, 5);
+    stats.Add(Stat.Cha, 5);
+
+    type = new List<UnitType>();
+    type.Add(UnitType.Grass);
+    type.Add(UnitType.Normal);
+
+    actions = new List<Action>();
+    passives = new List<Passive>();
+  }
 }
