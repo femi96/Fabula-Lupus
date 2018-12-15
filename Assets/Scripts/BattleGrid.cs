@@ -25,6 +25,9 @@ public class BattleGrid : MonoBehaviour {
   private Dictionary<Vector2Int, TileNode> tileDict;
   private Dictionary<Vector2Int, int> spawnDict;
 
+  // Add boundaries
+  public float xMin = 0, xMax = 0, zMin = 0, zMax = 0;
+
   private void GenerateGraphFromGameObject() {
     tileDict = new Dictionary<Vector2Int, TileNode>();
     spawnDict = new Dictionary<Vector2Int, int>();
@@ -38,7 +41,7 @@ public class BattleGrid : MonoBehaviour {
       if (marker) {
         switch (marker.type) {
         case MarkerType.Spawn:
-          spawnDict.Add(new Vector2Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.z)), marker.val);
+          spawnDict.Add(Vector3ToKey(v), marker.val);
           break;
 
         default:
@@ -53,6 +56,12 @@ public class BattleGrid : MonoBehaviour {
       // Else, add as tile
       TileNode node = new TileNode(v);
       tileDict.Add(node.GetKey(), node);
+
+      // Update boundaries
+      xMin = Mathf.Min(xMin, v.x - 0.45f);
+      xMax = Mathf.Max(xMax, v.x + 0.45f);
+      zMin = Mathf.Min(zMin, v.z - 0.45f);
+      zMax = Mathf.Max(zMax, v.z + 0.45f);
     }
 
     // Add edges for all adjacent nodes
@@ -87,5 +96,19 @@ public class BattleGrid : MonoBehaviour {
       Debug.Log(entry.Value);
     }
     */
+  }
+
+  private Vector2Int Vector3ToKey(Vector3 v) {
+    return new Vector2Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.z));
+  }
+
+  public float GetHeight(Vector3 v) {
+    Vector2Int k = Vector3ToKey(v);
+
+    if (tileDict.ContainsKey(k))
+      return tileDict[k].GetPos().y;
+
+    return 0f;
+
   }
 }

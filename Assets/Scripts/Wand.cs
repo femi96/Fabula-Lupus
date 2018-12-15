@@ -7,12 +7,19 @@ public class Wand : MonoBehaviour {
   Controller that handles wand movement, inputs, and behaviors
   */
 
+  // BattleGrid
+  private BattleGrid battle;
+
+  // Appearance
+  public Transform shape;
+
+  // Movement
   private float moveTime = 0f;
   private const float moveToTileCooldown = 1f;
   private float moveSpeed = 4f;
   private float moveToTileSpeed = 4f;
   private float moveToTileSpeedMax = 2f;
-  private float moveToTileSpeedMin = 0.5f;
+  private float moveToTileSpeedMin = 0.0f;
 
   void Start() {
 
@@ -20,13 +27,18 @@ public class Wand : MonoBehaviour {
 
   void Update() {
 
+    if (battle == null)
+      battle = Object.FindObjectOfType<BattleGrid>();
+
     moveTime += Time.deltaTime;
     MoveWand();
 
     // If not moving, move to lock
-    if (moveTime > moveToTileCooldown) {
+    if (moveTime > moveToTileCooldown)
       MoveWandToTile();
-    }
+
+    // Limit movement
+    LimitWandPosition();
   }
 
   // Move wand each frame
@@ -56,9 +68,6 @@ public class Wand : MonoBehaviour {
 
     // Apply move direction to transform
     transform.Translate(moveDirection.x, 0, moveDirection.z);
-
-    // Limit movement
-    // LimitWandPosition();
   }
 
   // If not moving, move to lock
@@ -68,11 +77,30 @@ public class Wand : MonoBehaviour {
     float deltaZ = Mathf.RoundToInt(transform.position.z) - transform.position.z;
     Vector3 deltaV = new Vector3(deltaX, 0, deltaZ);
 
-    float spd = Mathf.Min(Mathf.Max(deltaV.magnitude * moveToTileSpeed, moveToTileSpeedMin), moveToTileSpeedMax);
+    float time = Mathf.Min(1f, moveTime - moveToTileCooldown);
+    float spd = Mathf.Min(Mathf.Max(deltaV.magnitude * moveToTileSpeed * time, moveToTileSpeedMin), moveToTileSpeedMax);
+
+    deltaV = deltaV.normalized * spd * Time.deltaTime;
 
     if (deltaV.magnitude > Time.deltaTime)
-      deltaV = deltaV.normalized * spd * Time.deltaTime;
+      deltaV = deltaV.normalized * Time.deltaTime;
 
     transform.position += deltaV;
+  }
+
+  private void LimitWandPosition() {
+    if (transform.position.x < battle.xMin)
+      transform.position -= Vector3.right * (transform.position.x - battle.xMin);
+
+    if (transform.position.x > battle.xMax)
+      transform.position -= Vector3.right * (transform.position.x - battle.xMax);
+
+    if (transform.position.z < battle.zMin)
+      transform.position -= Vector3.forward * (transform.position.z - battle.zMin);
+
+    if (transform.position.z > battle.zMax)
+      transform.position -= Vector3.forward * (transform.position.z - battle.zMax);
+
+    shape.position -= Vector3.up * (shape.position.y - battle.GetHeight(transform.position));
   }
 }

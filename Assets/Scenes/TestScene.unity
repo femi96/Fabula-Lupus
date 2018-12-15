@@ -578,6 +578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8dbb5b60be4b24c836a127a1dd7653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shape: {fileID: 169901235}
 --- !u!1001 &467154598
 Prefab:
   m_ObjectHideFlags: 0
@@ -1009,6 +1010,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e084f6153469fe4499e8245a9352982d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xMin: 0
+  xMax: 0
+  zMin: 0
+  zMax: 0
 --- !u!4 &1416180126
 Transform:
   m_ObjectHideFlags: 0
