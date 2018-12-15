@@ -6,9 +6,21 @@ public class BattleGrid : MonoBehaviour {
 
   void Start() {
     GenerateGraphFromGameObject();
+    AddUnits();
   }
 
   void Update() {}
+
+  private List<BattleUnit> units;
+
+  private void AddUnits() {
+    units = new List<BattleUnit>();
+
+    foreach (KeyValuePair<Vector2Int, int> entry in spawnDict) {
+      Unit unit = new Unit();
+      units.Add(new BattleUnit(unit, entry.Key, entry.Value));
+    }
+  }
 
   private Dictionary<Vector2Int, TileNode> tileDict;
   private Dictionary<Vector2Int, int> spawnDict;

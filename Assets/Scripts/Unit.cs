@@ -8,16 +8,16 @@ public enum UnitType { Normal, Grass };
 
 public class Unit {
 
-  private string name;
-  private Gender gender;
+  public string name;
+  public Gender gender;
 
-  private int level;
-  private int exp;
-  private Dictionary<Stat, int> stats;
-  private List<UnitType> type;
+  public int level;
+  public int exp;
+  public Dictionary<Stat, int> stats;
+  public List<UnitType> type;
 
-  private List<Action> actions;
-  private List<Passive> passives;
+  public List<Action> actions;
+  public List<Passive> passives;
 
   public Unit() {
     name = "Boi";
