@@ -11,10 +11,10 @@ public class Unit {
   public string name;
   public Gender gender;
 
-  public int level;
-  public int exp;
+  public int level, exp;
   public Dictionary<Stat, int> stats;
   public List<UnitType> type;
+  public int healthCur, healthMax, manaCur, manaMax;
 
   public List<Action> actions;
   public List<Passive> passives;
@@ -35,6 +35,11 @@ public class Unit {
     stats.Add(Stat.Int, 5);
     stats.Add(Stat.Wil, 5);
     stats.Add(Stat.Cha, 5);
+
+    healthMax = 80 + stats[Stat.Con] * 7 + stats[Stat.Str] * 3 + stats[Stat.Agi] * 2 + level;
+    healthCur = healthMax;
+    manaMax = 10 + stats[Stat.Mnd] * 7 + stats[Stat.Int] * 3 + stats[Stat.Wil] * 2 + level;
+    manaCur = manaMax;
 
     type = new List<UnitType>();
     type.Add(UnitType.Grass);

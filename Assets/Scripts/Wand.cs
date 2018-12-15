@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Wand : MonoBehaviour {
   /*
@@ -28,15 +29,33 @@ public class Wand : MonoBehaviour {
 
   /* Wand UI */
   private BattleUnit targetUnit;
+  [Header("UI: Unit Panel Left")]
+  public GameObject unitPanelL;
+  public Text uplNameText;
+  public Text uplLevelText;
+  public Text uplHealthText;
+  public Text uplManaText;
 
   private void UpdateUI() {
+
+    // Update targetUnit
     BattleUnit newTargetUnit = battle.GetUnit(transform.position);
 
     if (newTargetUnit == targetUnit)
       return;
 
     targetUnit = newTargetUnit;
-    Debug.Log(targetUnit);
+
+    // Update UI for targetUnit
+    // TODO: Make it slide out instead of pop in
+    unitPanelL.SetActive(targetUnit != null);
+
+    if (targetUnit != null) {
+      uplNameText.text = targetUnit.unit.name;
+      uplLevelText.text = targetUnit.unit.level.ToString();
+      uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
+      uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
+    }
   }
 
   /* Wand Movement */
