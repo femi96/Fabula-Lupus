@@ -11,13 +11,35 @@ public class BattleGrid : MonoBehaviour {
   void Update() {}
 
   private Dictionary<Vector2Int, TileNode> tileDict;
+  private Dictionary<Vector2Int, int> spawnDict;
 
   private void GenerateGraphFromGameObject() {
     tileDict = new Dictionary<Vector2Int, TileNode>();
+    spawnDict = new Dictionary<Vector2Int, int>();
 
-    // Add nodes from gameobject children
+    // Add nodes from gameObject children
     foreach (Transform child in transform) {
-      TileNode node = new TileNode(child.position);
+      BattleGridMarker marker = child.gameObject.GetComponent<BattleGridMarker>();
+      Vector3 v = child.position;
+
+      // If marker, add as special
+      if (marker) {
+        switch (marker.type) {
+        case MarkerType.Spawn:
+          spawnDict.Add(new Vector2Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.z)), marker.val);
+          break;
+
+        default:
+          Debug.Log("Should not reach here");
+          break;
+        }
+
+        child.gameObject.SetActive(false);
+        continue;
+      }
+
+      // Else, add as tile
+      TileNode node = new TileNode(v);
       tileDict.Add(node.GetKey(), node);
     }
 
@@ -47,6 +69,9 @@ public class BattleGrid : MonoBehaviour {
     // Debug printing
     /*
     foreach (KeyValuePair<Vector2Int, TileNode> entry in tileDict) {
+      Debug.Log(entry.Value);
+    }
+    foreach (KeyValuePair<Vector2Int, int> entry in spawnDict) {
       Debug.Log(entry.Value);
     }
     */
