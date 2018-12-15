@@ -13,14 +13,6 @@ public class Wand : MonoBehaviour {
   // Appearance
   public Transform shape;
 
-  // Movement
-  private float moveTime = 0f;
-  private const float moveToTileCooldown = 1f;
-  private float moveSpeed = 4f;
-  private float moveToTileSpeed = 4f;
-  private float moveToTileSpeedMax = 2f;
-  private float moveToTileSpeedMin = 0.0f;
-
   void Start() {
 
   }
@@ -30,8 +22,35 @@ public class Wand : MonoBehaviour {
     if (battle == null)
       battle = Object.FindObjectOfType<BattleGrid>();
 
-    moveTime += Time.deltaTime;
     MoveWand();
+    UpdateUI();
+  }
+
+  /* Wand UI */
+  private BattleUnit targetUnit;
+
+  private void UpdateUI() {
+    BattleUnit newTargetUnit = battle.GetUnit(transform.position);
+
+    if (newTargetUnit == targetUnit)
+      return;
+
+    targetUnit = newTargetUnit;
+    Debug.Log(targetUnit);
+  }
+
+  /* Wand Movement */
+  private float moveTime = 0f;
+  private const float moveToTileCooldown = 1f;
+  private float moveSpeed = 4f;
+  private float moveToTileSpeed = 4f;
+  private float moveToTileSpeedMax = 2f;
+  private float moveToTileSpeedMin = 0.0f;
+
+  // Move wand each frame
+  private void MoveWand() {
+    moveTime += Time.deltaTime;
+    MoveWandFromInput();
 
     // If not moving, move to lock
     if (moveTime > moveToTileCooldown)
@@ -39,10 +58,11 @@ public class Wand : MonoBehaviour {
 
     // Limit movement
     LimitWandPosition();
+
   }
 
-  // Move wand each frame
-  private void MoveWand() {
+  // Move wand with inputs
+  private void MoveWandFromInput() {
 
     // Transform input direction based on camera forward
     float spd = moveSpeed * Time.deltaTime;

@@ -43,4 +43,8 @@ public class Unit {
     actions = new List<Action>();
     passives = new List<Passive>();
   }
+
+  public override string ToString() {
+    return name + " " + gender + " Lvl." + level;
+  }
 }

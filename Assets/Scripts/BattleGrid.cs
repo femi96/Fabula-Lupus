@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -110,5 +111,15 @@ public class BattleGrid : MonoBehaviour {
 
     return 0f;
 
+  }
+
+  public BattleUnit GetUnit(Vector3 v) {
+    Vector2Int k = Vector3ToKey(v);
+
+    foreach (BattleUnit unit in units)
+      if (unit.position == k)
+        return unit;
+
+    return null;
   }
 }

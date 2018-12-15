@@ -13,4 +13,8 @@ public class BattleUnit {
     position = p;
     team = t;
   }
+
+  public override string ToString() {
+    return unit.ToString();
+  }
 }
