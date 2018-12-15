@@ -44,17 +44,31 @@ public class Wand : MonoBehaviour {
     if (newTargetUnit == targetUnit)
       return;
 
-    targetUnit = newTargetUnit;
-
     // Update UI for targetUnit
     // TODO: Make it slide out instead of pop in
-    unitPanelL.SetActive(targetUnit != null);
+    // unitPanelL.SetActive(targetUnit != null);
+    Animator uplAnim = unitPanelL.GetComponent<Animator>();
+    AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
 
-    if (targetUnit != null) {
-      uplNameText.text = targetUnit.unit.name;
-      uplLevelText.text = targetUnit.unit.level.ToString();
-      uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
-      uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
+    if (uplAnimState.IsName("UnitPanelLSlideIn")) {
+      targetUnit = null;
+      float animTime = Mathf.Max(1f - uplAnimState.normalizedTime, 0f);
+      uplAnim.Play("UnitPanelLSlideOut", -1, animTime);
+      return;
+    }
+
+    if (uplAnimState.IsName("UnitPanelLSlideOut") && uplAnimState.normalizedTime > 1f) {
+
+      targetUnit = newTargetUnit;
+
+      if (targetUnit != null) {
+        uplNameText.text = targetUnit.unit.name;
+        uplLevelText.text = targetUnit.unit.level.ToString();
+        uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
+        uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
+
+        uplAnim.Play("UnitPanelLSlideIn");
+      }
     }
   }
 
