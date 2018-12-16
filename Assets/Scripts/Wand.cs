@@ -25,6 +25,12 @@ public class Wand : MonoBehaviour {
 
     MoveWand();
     UpdateUI();
+
+    if (Input.GetKeyDown("n")) {
+      battle.NextCurrentUnit();
+      Vector2Int pos = battle.currentUnit.position;
+      transform.position = new Vector3(pos.x, 0, pos.y);
+    }
   }
 
   /* Wand UI */

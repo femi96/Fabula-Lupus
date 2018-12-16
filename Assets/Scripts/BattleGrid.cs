@@ -10,18 +10,15 @@ public class BattleGrid : MonoBehaviour {
     AddUnits();
   }
 
-  void Update() {
-    if (Input.GetKeyDown("n"))
-      NextCurrentUnit();
-  }
+  void Update() {}
 
 
   /* Units */
   private List<BattleUnit> units;
   private List<BattleUnit> unitQueue;
-  private BattleUnit currentUnit;
   [Header("Units")]
   public GameObject unitPrefab;
+  public BattleUnit currentUnit;
 
   private void AddUnits() {
     units = new List<BattleUnit>();
@@ -33,13 +30,12 @@ public class BattleGrid : MonoBehaviour {
     }
   }
 
-  private void NextCurrentUnit() {
+  public void NextCurrentUnit() {
     if (unitQueue == null || unitQueue.Count == 0)
       UpdateUnitQueue();
 
     currentUnit = unitQueue[0];
     unitQueue.RemoveAt(0);
-    Debug.Log(currentUnit);
   }
 
   private void UpdateUnitQueue() {
