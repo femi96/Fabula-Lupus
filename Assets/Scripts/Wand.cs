@@ -45,8 +45,6 @@ public class Wand : MonoBehaviour {
       return;
 
     // Update UI for targetUnit
-    // TODO: Make it slide out instead of pop in
-    // unitPanelL.SetActive(targetUnit != null);
     Animator uplAnim = unitPanelL.GetComponent<Animator>();
     AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
 

@@ -12,21 +12,28 @@ public class BattleGrid : MonoBehaviour {
 
   void Update() {}
 
+
+  /* Units */
   private List<BattleUnit> units;
+  [Header("Units")]
+  public GameObject unitPrefab;
 
   private void AddUnits() {
     units = new List<BattleUnit>();
 
     foreach (KeyValuePair<Vector2Int, int> entry in spawnDict) {
       Unit unit = new Unit();
-      units.Add(new BattleUnit(unit, entry.Key, entry.Value));
+      GameObject go = Instantiate(unitPrefab, tileDict[entry.Key].GetPos(), Quaternion.identity, transform);
+      units.Add(new BattleUnit(unit, entry.Key, entry.Value, go));
     }
   }
 
+  /* Tiles */
   private Dictionary<Vector2Int, TileNode> tileDict;
   private Dictionary<Vector2Int, int> spawnDict;
 
   // Add boundaries
+  [HideInInspector]
   public float xMin = 0, xMax = 0, zMin = 0, zMax = 0;
 
   private void GenerateGraphFromGameObject() {
