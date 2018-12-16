@@ -72,7 +72,7 @@ public class Wand : MonoBehaviour {
 
   /* Wand Movement */
   private float moveTime = 0f;
-  private const float moveToTileCooldown = 0.25f;
+  private const float moveToTileCooldown = 2.5f;
   private float moveSpeed = 4f;
   private float moveToTileSpeed = 4f;
   private float moveToTileSpeedMax = 2f;
