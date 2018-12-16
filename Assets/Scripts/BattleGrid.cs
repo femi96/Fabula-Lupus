@@ -10,11 +10,16 @@ public class BattleGrid : MonoBehaviour {
     AddUnits();
   }
 
-  void Update() {}
+  void Update() {
+    if (Input.GetKeyDown("n"))
+      NextCurrentUnit();
+  }
 
 
   /* Units */
   private List<BattleUnit> units;
+  private List<BattleUnit> unitQueue;
+  private BattleUnit currentUnit;
   [Header("Units")]
   public GameObject unitPrefab;
 
@@ -25,6 +30,41 @@ public class BattleGrid : MonoBehaviour {
       Unit unit = new Unit();
       GameObject go = Instantiate(unitPrefab, tileDict[entry.Key].GetPos(), Quaternion.identity, transform);
       units.Add(new BattleUnit(unit, entry.Key, entry.Value, go));
+    }
+  }
+
+  private void NextCurrentUnit() {
+    if (unitQueue == null || unitQueue.Count == 0)
+      UpdateUnitQueue();
+
+    currentUnit = unitQueue[0];
+    unitQueue.RemoveAt(0);
+    Debug.Log(currentUnit);
+  }
+
+  private void UpdateUnitQueue() {
+    unitQueue = new List<BattleUnit>();
+
+    foreach (BattleUnit u in units) {
+      u.unit.speedTemp = u.unit.speedCur + UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7);
+    }
+
+    while (true) {
+      int highestSpeed = 0;
+      BattleUnit highestUnit = null;
+
+      foreach (BattleUnit u in units) {
+        if (u.unit.speedTemp > highestSpeed) {
+          highestSpeed = u.unit.speedTemp;
+          highestUnit = u;
+        }
+      }
+
+      if (highestSpeed == 0)
+        break;
+
+      unitQueue.Add(highestUnit);
+      highestUnit.unit.speedTemp -= 8;
     }
   }
 

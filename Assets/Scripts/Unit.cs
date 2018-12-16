@@ -14,32 +14,35 @@ public class Unit {
   public int level, exp;
   public Dictionary<Stat, int> stats;
   public List<UnitType> type;
-  public int healthCur, healthMax, manaCur, manaMax;
+  public int healthCur, healthMax, manaCur, manaMax, speedCur, speedMax, speedTemp;
 
   public List<Action> actions;
   public List<Passive> passives;
 
   public Unit() {
-    name = "Boi";
+    name = "Boi " + Random.Range(1, 100).ToString();
     gender = Gender.M;
 
-    level = 1;
+    level = Random.Range(1, 11);
     exp = 0;
 
     stats = new Dictionary<Stat, int>();
-    stats.Add(Stat.Con, 5);
-    stats.Add(Stat.Str, 5);
-    stats.Add(Stat.Agi, 5);
-    stats.Add(Stat.Rea, 5);
-    stats.Add(Stat.Mnd, 5);
-    stats.Add(Stat.Int, 5);
-    stats.Add(Stat.Wil, 5);
-    stats.Add(Stat.Cha, 5);
+    stats.Add(Stat.Con, Random.Range(3, 8));
+    stats.Add(Stat.Str, Random.Range(3, 8));
+    stats.Add(Stat.Agi, Random.Range(3, 8));
+    stats.Add(Stat.Rea, Random.Range(3, 8));
+    stats.Add(Stat.Mnd, Random.Range(3, 8));
+    stats.Add(Stat.Int, Random.Range(3, 8));
+    stats.Add(Stat.Wil, Random.Range(3, 8));
+    stats.Add(Stat.Cha, Random.Range(3, 8));
 
-    healthMax = 80 + stats[Stat.Con] * 7 + stats[Stat.Str] * 3 + stats[Stat.Agi] * 2 + level;
+    healthMax = 40 + stats[Stat.Con] * 3 + stats[Stat.Str];
     healthCur = healthMax;
-    manaMax = 10 + stats[Stat.Mnd] * 7 + stats[Stat.Int] * 3 + stats[Stat.Wil] * 2 + level;
+    manaMax = 10 + stats[Stat.Mnd] * 3 + stats[Stat.Int];
     manaCur = manaMax;
+    speedMax = stats[Stat.Rea] + stats[Stat.Int];
+    speedCur = speedMax;
+    speedTemp = speedCur;
 
     type = new List<UnitType>();
     type.Add(UnitType.Grass);
