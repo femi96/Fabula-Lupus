@@ -13,9 +13,6 @@ public class Wand : MonoBehaviour {
   public WandCamera cam;
   public Transform shape;
 
-  // Game state
-  public bool onUnitCommands = false;
-
   void Start() {
     StartUI();
   }
@@ -29,12 +26,39 @@ public class Wand : MonoBehaviour {
     UpdateUI();
 
     if (Input.GetKeyDown("n")) {
-      battle.NextCurrentUnit();
-      // cam.SetMenuMode(true);
-      onUnitCommands = true;
-      Vector2Int pos = battle.currentUnit.position;
-      transform.position = new Vector3(pos.x, 0, pos.y);
+      PassUnit();
     }
+  }
+
+  /* Game Change */
+  public bool onUnitCommands = false;
+  public bool onUnitWait = false;
+
+  private void PassUnit() {
+    onUnitCommands = true;
+    battle.NextCurrentUnit();
+
+    // Camera
+    cam.SetMenuMode(true);
+
+    // Move
+    Vector2Int pos = battle.currentUnit.position;
+    transform.position = new Vector3(pos.x, 0, pos.y);
+  }
+
+  public void OnWait() {
+    onUnitWait = true;
+    onUnitCommands = false;
+  }
+
+  public void OnWaitConfirm() {
+    onUnitWait = false;
+    PassUnit();
+  }
+
+  public void OnWaitCancel() {
+    onUnitWait = false;
+    onUnitCommands = true;
   }
 
   /* Wand UI */
@@ -46,12 +70,14 @@ public class Wand : MonoBehaviour {
   public Text uplHealthText;
   public Text uplManaText;
 
-  [Header("UI: Unit CommandsMenu")]
+  [Header("UI: Unit Menu")]
   public GameObject unitCommandsMenu;
+  public GameObject unitWait;
 
   private void StartUI() {
-    unitPanelL.GetComponent<Animator>().Play("UnitPanelLSlideOut", -1, 1f);
-    unitCommandsMenu.GetComponent<Animator>().Play("UnitCommandsMenuSlideOut", -1, 1f);
+    unitPanelL.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitCommandsMenu.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitWait.GetComponent<Animator>().Play("SlideOut", -1, 1f);
   }
 
   private void UpdateUI() {
@@ -67,13 +93,13 @@ public class Wand : MonoBehaviour {
       Animator uplAnim = unitPanelL.GetComponent<Animator>();
       AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
 
-      if (uplAnimState.IsName("UnitPanelLSlideIn")) {
+      if (uplAnimState.IsName("SlideIn")) {
         targetUnit = null;
         float animTime = Mathf.Max(1f - uplAnimState.normalizedTime, 0f);
-        uplAnim.Play("UnitPanelLSlideOut", -1, animTime);
+        uplAnim.Play("SlideOut", -1, animTime);
       }
 
-      if (uplAnimState.IsName("UnitPanelLSlideOut") && uplAnimState.normalizedTime > 1f) {
+      if (uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
 
         targetUnit = newTargetUnit;
 
@@ -83,24 +109,35 @@ public class Wand : MonoBehaviour {
           uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
           uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
 
-          uplAnim.Play("UnitPanelLSlideIn");
+          uplAnim.Play("SlideIn");
         }
       }
     }
 
     // UI: Unit Commands Menu
-    if (onUnitCommands) {
-      Animator ucmAnim = unitCommandsMenu.GetComponent<Animator>();
-      AnimatorStateInfo ucmAnimState = ucmAnim.GetCurrentAnimatorStateInfo(0);
+    Animator ucmAnim = unitCommandsMenu.GetComponent<Animator>();
+    AnimatorStateInfo ucmAnimState = ucmAnim.GetCurrentAnimatorStateInfo(0);
 
-      if (targetUnit != battle.currentUnit && ucmAnimState.IsName("UnitCommandsMenuSlideIn")) {
-        float animTime = Mathf.Max(1f - ucmAnimState.normalizedTime, 0f);
-        ucmAnim.Play("UnitCommandsMenuSlideOut", -1, animTime);
-      }
+    if (!onUnitCommands && ucmAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - ucmAnimState.normalizedTime, 0f);
+      ucmAnim.Play("SlideOut", -1, animTime);
+    }
 
-      if (newTargetUnit == battle.currentUnit && ucmAnimState.IsName("UnitCommandsMenuSlideOut") && ucmAnimState.normalizedTime > 1f) {
-        ucmAnim.Play("UnitCommandsMenuSlideIn");
-      }
+    if (onUnitCommands && newTargetUnit == battle.currentUnit && ucmAnimState.IsName("SlideOut") && ucmAnimState.normalizedTime > 1f) {
+      ucmAnim.Play("SlideIn");
+    }
+
+    // UI: Unit Wait
+    Animator uwAnim = unitWait.GetComponent<Animator>();
+    AnimatorStateInfo uwAnimState = uwAnim.GetCurrentAnimatorStateInfo(0);
+
+    if (!onUnitWait && uwAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - uwAnimState.normalizedTime, 0f);
+      uwAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if (onUnitWait && newTargetUnit == battle.currentUnit && uwAnimState.IsName("SlideOut") && uwAnimState.normalizedTime > 1f) {
+      uwAnim.Play("SlideIn");
     }
   }
 
@@ -112,11 +149,11 @@ public class Wand : MonoBehaviour {
   private float moveToTileSpeedMax = 2f;
   private float moveToTileSpeedMin = 0.0f;
 
-  // Move wand each frame
+// Move wand each frame
   private void MoveWand() {
     moveTime += Time.deltaTime;
 
-    if (!onUnitCommands)
+    if (!onUnitCommands && !onUnitWait)
       MoveWandFromInput();
 
     // If not moving, move to lock
@@ -128,7 +165,7 @@ public class Wand : MonoBehaviour {
 
   }
 
-  // Move wand with inputs
+// Move wand with inputs
   private void MoveWandFromInput() {
 
     // Transform input direction based on camera forward
@@ -157,7 +194,7 @@ public class Wand : MonoBehaviour {
     transform.Translate(moveDirection.x, 0, moveDirection.z);
   }
 
-  // If not moving, move to lock
+// If not moving, move to lock
   private void MoveWandToTile() {
 
     float deltaX = Mathf.RoundToInt(transform.position.x) - transform.position.x;
