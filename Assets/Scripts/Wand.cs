@@ -123,7 +123,7 @@ public class Wand : MonoBehaviour {
       ucmAnim.Play("SlideOut", -1, animTime);
     }
 
-    if (onUnitCommands && newTargetUnit == battle.currentUnit && ucmAnimState.IsName("SlideOut") && ucmAnimState.normalizedTime > 1f) {
+    if (onUnitCommands && targetUnit == battle.currentUnit && ucmAnimState.IsName("SlideOut") && ucmAnimState.normalizedTime > 1f) {
       ucmAnim.Play("SlideIn");
     }
 
@@ -136,7 +136,7 @@ public class Wand : MonoBehaviour {
       uwAnim.Play("SlideOut", -1, animTime);
     }
 
-    if (onUnitWait && newTargetUnit == battle.currentUnit && uwAnimState.IsName("SlideOut") && uwAnimState.normalizedTime > 1f) {
+    if (onUnitWait && targetUnit == battle.currentUnit && uwAnimState.IsName("SlideOut") && uwAnimState.normalizedTime > 1f) {
       uwAnim.Play("SlideIn");
     }
   }
