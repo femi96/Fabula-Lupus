@@ -238,7 +238,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Look
+  m_Text: '> Look'
 --- !u!114 &114500313961565444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -421,7 +421,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Act
+  m_Text: '> Act'
 --- !u!114 &114839466696288826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -454,7 +454,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Wait
+  m_Text: '> Wait
 
 '
 --- !u!114 &114975407307261110
@@ -489,7 +489,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move
+  m_Text: '> Move'
 --- !u!222 &222149352778686344
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -559,8 +559,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 60, y: -190}
-  m_SizeDelta: {x: -60, y: 60}
+  m_AnchoredPosition: {x: 50, y: -190}
+  m_SizeDelta: {x: -50, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224530447651257578
 RectTransform:
@@ -577,8 +577,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 60, y: -250}
-  m_SizeDelta: {x: -60, y: 60}
+  m_AnchoredPosition: {x: 50, y: -250}
+  m_SizeDelta: {x: -50, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224540576854282242
 RectTransform:
@@ -595,8 +595,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 60, y: -70}
-  m_SizeDelta: {x: -60, y: 60}
+  m_AnchoredPosition: {x: 50, y: -70}
+  m_SizeDelta: {x: -50, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224658599298052040
 RectTransform:
@@ -655,6 +655,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 60, y: -130}
-  m_SizeDelta: {x: -60, y: 60}
+  m_AnchoredPosition: {x: 50, y: -130}
+  m_SizeDelta: {x: -50, y: 60}
   m_Pivot: {x: 0, y: 1}
