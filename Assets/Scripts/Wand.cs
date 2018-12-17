@@ -8,14 +8,16 @@ public class Wand : MonoBehaviour {
   Controller that handles wand movement, inputs, and behaviors
   */
 
-  // BattleGrid
+  // Object refs
   private BattleGrid battle;
-
-  // Appearance
+  public WandCamera cam;
   public Transform shape;
 
-  void Start() {
+  // Game state
+  public bool onUnitCommands = false;
 
+  void Start() {
+    StartUI();
   }
 
   void Update() {
@@ -28,6 +30,8 @@ public class Wand : MonoBehaviour {
 
     if (Input.GetKeyDown("n")) {
       battle.NextCurrentUnit();
+      // cam.SetMenuMode(true);
+      onUnitCommands = true;
       Vector2Int pos = battle.currentUnit.position;
       transform.position = new Vector3(pos.x, 0, pos.y);
     }
@@ -42,36 +46,60 @@ public class Wand : MonoBehaviour {
   public Text uplHealthText;
   public Text uplManaText;
 
+  [Header("UI: Unit CommandsMenu")]
+  public GameObject unitCommandsMenu;
+
+  private void StartUI() {
+    unitPanelL.GetComponent<Animator>().Play("UnitPanelLSlideOut", -1, 1f);
+    unitCommandsMenu.GetComponent<Animator>().Play("UnitCommandsMenuSlideOut", -1, 1f);
+  }
+
   private void UpdateUI() {
 
     // Update targetUnit
     BattleUnit newTargetUnit = battle.GetUnit(transform.position);
 
-    if (newTargetUnit == targetUnit)
-      return;
-
     // Update UI for targetUnit
-    Animator uplAnim = unitPanelL.GetComponent<Animator>();
-    AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
 
-    if (uplAnimState.IsName("UnitPanelLSlideIn")) {
-      targetUnit = null;
-      float animTime = Mathf.Max(1f - uplAnimState.normalizedTime, 0f);
-      uplAnim.Play("UnitPanelLSlideOut", -1, animTime);
-      return;
+    // UI: Unit Panel L
+    if (newTargetUnit != targetUnit) {
+
+      Animator uplAnim = unitPanelL.GetComponent<Animator>();
+      AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
+
+      if (uplAnimState.IsName("UnitPanelLSlideIn")) {
+        targetUnit = null;
+        float animTime = Mathf.Max(1f - uplAnimState.normalizedTime, 0f);
+        uplAnim.Play("UnitPanelLSlideOut", -1, animTime);
+      }
+
+      if (uplAnimState.IsName("UnitPanelLSlideOut") && uplAnimState.normalizedTime > 1f) {
+
+        targetUnit = newTargetUnit;
+
+        if (targetUnit != null) {
+          uplNameText.text = targetUnit.unit.name;
+          uplLevelText.text = targetUnit.unit.level.ToString();
+          uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
+          uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
+
+          uplAnim.Play("UnitPanelLSlideIn");
+        }
+      }
     }
 
-    if (uplAnimState.IsName("UnitPanelLSlideOut") && uplAnimState.normalizedTime > 1f) {
+    // UI: Unit Commands Menu
+    if (onUnitCommands) {
+      Animator ucmAnim = unitCommandsMenu.GetComponent<Animator>();
+      AnimatorStateInfo ucmAnimState = ucmAnim.GetCurrentAnimatorStateInfo(0);
 
-      targetUnit = newTargetUnit;
+      if (targetUnit != battle.currentUnit && ucmAnimState.IsName("UnitCommandsMenuSlideIn")) {
+        float animTime = Mathf.Max(1f - ucmAnimState.normalizedTime, 0f);
+        ucmAnim.Play("UnitCommandsMenuSlideOut", -1, animTime);
+      }
 
-      if (targetUnit != null) {
-        uplNameText.text = targetUnit.unit.name;
-        uplLevelText.text = targetUnit.unit.level.ToString();
-        uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
-        uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
-
-        uplAnim.Play("UnitPanelLSlideIn");
+      if (newTargetUnit == battle.currentUnit && ucmAnimState.IsName("UnitCommandsMenuSlideOut") && ucmAnimState.normalizedTime > 1f) {
+        ucmAnim.Play("UnitCommandsMenuSlideIn");
       }
     }
   }
@@ -87,7 +115,9 @@ public class Wand : MonoBehaviour {
   // Move wand each frame
   private void MoveWand() {
     moveTime += Time.deltaTime;
-    MoveWandFromInput();
+
+    if (!onUnitCommands)
+      MoveWandFromInput();
 
     // If not moving, move to lock
     if (moveTime > moveToTileCooldown)

@@ -26,7 +26,7 @@ public class WandCamera : MonoBehaviour {
   void Start() {
 
     // Lock cursor to screen
-    SetMenuMode(true);
+    SetMenuMode(false);
 
     // Camera positioning
     Vector3 angles = transform.eulerAngles;

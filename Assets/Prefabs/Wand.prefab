@@ -211,9 +211,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8dbb5b60be4b24c836a127a1dd7653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 114626195445643248}
   shape: {fileID: 4275856005533088}
   unitPanelL: {fileID: 0}
   uplNameText: {fileID: 0}
+  uplLevelText: {fileID: 0}
   uplHealthText: {fileID: 0}
   uplManaText: {fileID: 0}
-  uplLevelText: {fileID: 0}
+  unitCommandsMenu: {fileID: 0}
