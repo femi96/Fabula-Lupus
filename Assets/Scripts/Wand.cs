@@ -73,6 +73,10 @@ public class Wand : MonoBehaviour {
     cam.SetMenuMode(true);
     onUnitLook = false;
     onUnitCommands = true;
+
+    // Move wand
+    Vector2Int pos = battle.currentUnit.position;
+    transform.position = new Vector3(pos.x, 0, pos.y);
   }
 
   public void KeyInputs() {
