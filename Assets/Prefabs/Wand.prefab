@@ -213,9 +213,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 114626195445643248}
   shape: {fileID: 4275856005533088}
+  onUnitCommands: 0
+  onUnitWait: 0
+  onUnitLook: 0
   unitPanelL: {fileID: 0}
   uplNameText: {fileID: 0}
   uplLevelText: {fileID: 0}
   uplHealthText: {fileID: 0}
   uplManaText: {fileID: 0}
   unitCommandsMenu: {fileID: 0}
+  unitWait: {fileID: 0}
+  unitStatus: {fileID: 0}
+  unitLookCancel: {fileID: 0}
