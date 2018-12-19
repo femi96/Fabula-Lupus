@@ -32,9 +32,12 @@ public class Wand : MonoBehaviour {
   }
 
   /* Game Change */
+  private BattleUnit targetUnit;
+
   public bool onUnitCommands = false;
   public bool onUnitWait = false;
   public bool onUnitLook = false;
+  public bool onStatusScreen = false;
 
   private void PassUnit() {
     onUnitCommands = true;
@@ -79,14 +82,33 @@ public class Wand : MonoBehaviour {
     transform.position = new Vector3(pos.x, 0, pos.y);
   }
 
+  public void OnStatus() {
+    cam.SetMenuMode(true);
+    onStatusScreen = true;
+    onUnitLook = false;
+  }
+
+  public void OnStatusCancel() {
+    cam.SetMenuMode(false);
+    onStatusScreen = false;
+    onUnitLook = true;
+  }
+
   public void KeyInputs() {
     if (onUnitLook && Input.GetKeyDown("z")) {
       OnLookCancel();
     }
+
+    if ((onUnitLook && targetUnit == battle.currentUnit) && Input.GetKeyDown("x")) {
+      OnStatus();
+    }
+
+    if (onStatusScreen && Input.GetKeyDown("z")) {
+      OnStatusCancel();
+    }
   }
 
   /* Wand UI */
-  private BattleUnit targetUnit;
   [Header("UI: Unit Panel Left")]
   public GameObject unitPanelL;
   public Text uplNameText;
@@ -97,15 +119,19 @@ public class Wand : MonoBehaviour {
   [Header("UI: Unit Menu")]
   public GameObject unitCommandsMenu;
   public GameObject unitWait;
-  public GameObject unitStatus;
+  public GameObject unitStatusKey;
   public GameObject unitLookCancel;
+
+  [Header("UI: Unit Status")]
+  public GameObject unitStatus;
 
   private void StartUI() {
     unitPanelL.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitCommandsMenu.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitWait.GetComponent<Animator>().Play("SlideOut", -1, 1f);
-    unitStatus.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitStatusKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitLookCancel.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitStatus.GetComponent<Animator>().Play("SlideOut", -1, 1f);
   }
 
   private void UpdateUI() {
@@ -116,7 +142,7 @@ public class Wand : MonoBehaviour {
     // Update UI for targetUnit
 
     // UI: Unit Panel L
-    if (newTargetUnit != targetUnit) {
+    if (newTargetUnit != targetUnit || onStatusScreen) {
 
       Animator uplAnim = unitPanelL.GetComponent<Animator>();
       AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
@@ -169,18 +195,40 @@ public class Wand : MonoBehaviour {
     }
 
     // UI: Unit Look
-    Animator usAnim = unitStatus.GetComponent<Animator>();
+    Animator uskAnim = unitStatusKey.GetComponent<Animator>();
     Animator ulcAnim = unitLookCancel.GetComponent<Animator>();
-    AnimatorStateInfo usAnimState = usAnim.GetCurrentAnimatorStateInfo(0);
+    AnimatorStateInfo uskAnimState = uskAnim.GetCurrentAnimatorStateInfo(0);
     AnimatorStateInfo ulcAnimState = ulcAnim.GetCurrentAnimatorStateInfo(0);
 
-    if (!onUnitLook && ulcAnimState.IsName("SlideIn")) {
+    if (!(onUnitLook && targetUnit == battle.currentUnit) && uskAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - uskAnimState.normalizedTime, 0f);
+      uskAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if ((onUnitLook && targetUnit == battle.currentUnit) && uskAnimState.IsName("SlideOut") && uskAnimState.normalizedTime > 1f) {
+      uskAnim.Play("SlideIn");
+    }
+
+    if (!(onUnitLook || onStatusScreen) && ulcAnimState.IsName("SlideIn")) {
       float animTime = Mathf.Max(1f - ulcAnimState.normalizedTime, 0f);
       ulcAnim.Play("SlideOut", -1, animTime);
     }
 
-    if (onUnitLook && ulcAnimState.IsName("SlideOut") && ulcAnimState.normalizedTime > 1f) {
+    if ((onUnitLook || onStatusScreen) && ulcAnimState.IsName("SlideOut") && ulcAnimState.normalizedTime > 1f) {
       ulcAnim.Play("SlideIn");
+    }
+
+    // UI: Unit Status
+    Animator usAnim = unitStatus.GetComponent<Animator>();
+    AnimatorStateInfo usAnimState = usAnim.GetCurrentAnimatorStateInfo(0);
+
+    if (!onStatusScreen && usAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - usAnimState.normalizedTime, 0f);
+      usAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if (onStatusScreen && usAnimState.IsName("SlideOut") && usAnimState.normalizedTime > 1f) {
+      usAnim.Play("SlideIn");
     }
   }
 
@@ -192,7 +240,7 @@ public class Wand : MonoBehaviour {
   private float moveToTileSpeedMax = 2f;
   private float moveToTileSpeedMin = 0.0f;
 
-// Move wand each frame
+  // Move wand each frame
   private void MoveWand() {
     moveTime += Time.deltaTime;
 

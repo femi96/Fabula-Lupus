@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 224896336360522294}
   - component: {fileID: 95599325207274286}
   m_Layer: 5
-  m_Name: StatusButton
+  m_Name: UnitStatusKey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
