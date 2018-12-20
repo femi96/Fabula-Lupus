@@ -99,7 +99,7 @@ public class Wand : MonoBehaviour {
       OnLookCancel();
     }
 
-    if ((onUnitLook && targetUnit == battle.currentUnit) && Input.GetKeyDown("x")) {
+    if ((onUnitLook && targetUnit != null) && Input.GetKeyDown("x")) {
       OnStatus();
     }
 
@@ -111,10 +111,6 @@ public class Wand : MonoBehaviour {
   /* Wand UI */
   [Header("UI: Unit Panel Left")]
   public GameObject unitPanelL;
-  public Text uplNameText;
-  public Text uplLevelText;
-  public Text uplHealthText;
-  public Text uplManaText;
 
   [Header("UI: Unit Menu")]
   public GameObject unitCommandsMenu;
@@ -158,11 +154,7 @@ public class Wand : MonoBehaviour {
         targetUnit = newTargetUnit;
 
         if (targetUnit != null) {
-          uplNameText.text = targetUnit.unit.name;
-          uplLevelText.text = targetUnit.unit.level.ToString();
-          uplHealthText.text = targetUnit.unit.healthCur.ToString() + "/" + targetUnit.unit.healthMax.ToString();
-          uplManaText.text = targetUnit.unit.manaCur.ToString() + "/" + targetUnit.unit.manaMax.ToString();
-
+          targetUnit.unit.SetPanelUI(unitPanelL);
           uplAnim.Play("SlideIn");
         }
       }
@@ -200,12 +192,12 @@ public class Wand : MonoBehaviour {
     AnimatorStateInfo uskAnimState = uskAnim.GetCurrentAnimatorStateInfo(0);
     AnimatorStateInfo ulcAnimState = ulcAnim.GetCurrentAnimatorStateInfo(0);
 
-    if (!(onUnitLook && targetUnit == battle.currentUnit) && uskAnimState.IsName("SlideIn")) {
+    if (!(onUnitLook && targetUnit != null) && uskAnimState.IsName("SlideIn")) {
       float animTime = Mathf.Max(1f - uskAnimState.normalizedTime, 0f);
       uskAnim.Play("SlideOut", -1, animTime);
     }
 
-    if ((onUnitLook && targetUnit == battle.currentUnit) && uskAnimState.IsName("SlideOut") && uskAnimState.normalizedTime > 1f) {
+    if ((onUnitLook && targetUnit != null) && uskAnimState.IsName("SlideOut") && uskAnimState.normalizedTime > 1f) {
       uskAnim.Play("SlideIn");
     }
 
@@ -228,6 +220,7 @@ public class Wand : MonoBehaviour {
     }
 
     if (onStatusScreen && usAnimState.IsName("SlideOut") && usAnimState.normalizedTime > 1f) {
+      newTargetUnit.unit.SetStatusUI(unitStatus);
       usAnim.Play("SlideIn");
     }
   }

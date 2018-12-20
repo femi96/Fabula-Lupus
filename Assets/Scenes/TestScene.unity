@@ -571,7 +571,7 @@ Prefab:
     - target: {fileID: 224589371319233342, guid: e4584c46cbe789a4bba5b61538b6918b,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 600
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 224589371319233342, guid: e4584c46cbe789a4bba5b61538b6918b,
         type: 2}
@@ -603,11 +603,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 95322083461014190, guid: e4584c46cbe789a4bba5b61538b6918b,
-        type: 2}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 75c8877475b12b746b0cd8748135b2f2, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e4584c46cbe789a4bba5b61538b6918b, type: 2}
   m_IsPrefabParent: 0
