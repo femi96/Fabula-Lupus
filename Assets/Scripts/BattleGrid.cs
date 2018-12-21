@@ -67,18 +67,25 @@ public class BattleGrid : MonoBehaviour {
   public bool isMovingUnit = false;
   private BattleUnit movingUnit;
   private List<TileNode> movingPath;
+  private int moveTime = 0;
 
   public void MoveUnit(BattleUnit unit, List<TileNode> path) {
     isMovingUnit = true;
     movingUnit = unit;
     movingPath = path;
+    moveTime = 0;
   }
 
   void Update() {
     if (isMovingUnit) {
-      TileNode current = movingPath[0];
-      movingPath.RemoveAt(0);
-      movingUnit.Move(current.GetPos(), Vector3ToKey(current.GetPos()));
+      if (moveTime <= 0) {
+        TileNode current = movingPath[0];
+        movingPath.RemoveAt(0);
+        movingUnit.Move(current.GetPos(), Vector3ToKey(current.GetPos()));
+        moveTime = 20;
+      } else {
+        moveTime -= 1;
+      }
 
       if (movingPath.Count == 0)
         isMovingUnit = false;

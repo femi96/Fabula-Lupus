@@ -41,7 +41,7 @@ public class Unit {
     stats.Add(Stat.Wil, Random.Range(3, 8));
     stats.Add(Stat.Cha, Random.Range(3, 8));
 
-    move = 2f;
+    move = 5f;
     jump = 0.5f;
 
     healthMax = 40 + stats[Stat.Con] * 3 + stats[Stat.Str];
