@@ -40,6 +40,10 @@ public class Wand : MonoBehaviour {
   public bool onStatusScreen = false;
   public bool onUnitMove = false;
 
+  private HashSet<TileNode> targetTiles;
+  public GameObject tilePrefab;
+  public Transform tileTransform;
+
   private void PassUnit() {
     onUnitCommands = true;
     battle.NextCurrentUnit();
@@ -101,10 +105,10 @@ public class Wand : MonoBehaviour {
     onUnitCommands = false;
 
     // Move tiles
-    HashSet<TileNode> tiles = battle.GetMoveTiles(battle.currentUnit);
+    targetTiles = battle.GetMoveTiles(battle.currentUnit);
 
-    foreach (TileNode tile in tiles)
-      Debug.Log(tile);
+    foreach (TileNode tile in targetTiles)
+      Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
   }
 
   public void OnMoveCancel() {
@@ -115,6 +119,10 @@ public class Wand : MonoBehaviour {
     // Move wand
     Vector2Int pos = battle.currentUnit.position;
     transform.position = new Vector3(pos.x, 0, pos.y);
+
+    // Delete tiles
+    foreach (Transform tile in tileTransform)
+      Destroy(tile.gameObject);
   }
 
   public void KeyInputs() {
