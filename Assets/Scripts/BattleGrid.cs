@@ -183,7 +183,6 @@ public class BattleGrid : MonoBehaviour {
       return tileDict[k].GetPos().y;
 
     return 0f;
-
   }
 
   public BattleUnit GetUnit(Vector3 v) {
@@ -238,7 +237,11 @@ public class BattleGrid : MonoBehaviour {
         float edgeDist = baseDist + edge.GetWeight();
         TileNode node = edge.GetNode();
 
-        if (edgeDist <= move && edgeDist <= distances[node]) {
+        // Unit blocking
+        BattleUnit blockingUnit = GetUnit(node.GetPos());
+        bool blocked = (blockingUnit != null && blockingUnit.team != bu.team);
+
+        if (edgeDist <= move && edgeDist <= distances[node] && !blocked) {
           if (!previous.ContainsKey(node))
             queue.Add(node);
 
@@ -248,8 +251,10 @@ public class BattleGrid : MonoBehaviour {
       }
     }
 
-    // Remove initial and return
-    visited.Remove(tileDict[bu.position]);
+    // Remove units and return
+    foreach (BattleUnit unit in units)
+      visited.Remove(tileDict[unit.position]);
+
     return visited;
   }
 
@@ -286,7 +291,11 @@ public class BattleGrid : MonoBehaviour {
         float edgeDist = baseDist + edge.GetWeight();
         TileNode node = edge.GetNode();
 
-        if (edgeDist <= move && edgeDist <= distances[node]) {
+        // Unit blocking
+        BattleUnit blockingUnit = GetUnit(node.GetPos());
+        bool blocked = (blockingUnit != null && blockingUnit.team != bu.team);
+
+        if (edgeDist <= move && edgeDist <= distances[node] && !blocked) {
           if (!previous.ContainsKey(node))
             queue.Add(node);
 
