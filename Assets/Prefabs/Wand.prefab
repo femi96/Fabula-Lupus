@@ -218,6 +218,7 @@ MonoBehaviour:
   onUnitLook: 0
   onStatusScreen: 0
   onUnitMove: 0
+  whileUnitMove: 0
   tilePrefab: {fileID: 1340462263065930, guid: ad08bc1178dd97b46bafde6c9c02b64f, type: 2}
   tileTransform: {fileID: 0}
   unitPanelL: {fileID: 0}
@@ -225,4 +226,5 @@ MonoBehaviour:
   unitWait: {fileID: 0}
   unitStatusKey: {fileID: 0}
   unitCancelKey: {fileID: 0}
+  unitMoveKey: {fileID: 0}
   unitStatus: {fileID: 0}

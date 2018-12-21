@@ -22,6 +22,9 @@ public class Wand : MonoBehaviour {
     if (battle == null)
       battle = Object.FindObjectOfType<BattleGrid>();
 
+    if (whileUnitMove && !battle.isMovingUnit)
+      OnMoveFinish();
+
     MoveWand();
     KeyInputs();
     UpdateUI();
@@ -39,6 +42,7 @@ public class Wand : MonoBehaviour {
   public bool onUnitLook = false;
   public bool onStatusScreen = false;
   public bool onUnitMove = false;
+  public bool whileUnitMove = false;
 
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
@@ -111,6 +115,26 @@ public class Wand : MonoBehaviour {
       Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
   }
 
+  public void OnMoveConfirm() {
+    cam.SetMenuMode(true);
+    whileUnitMove = true;
+    onUnitMove = false;
+
+    // Move unit
+    TileNode end = battle.GetTile(transform.position);
+    List<TileNode> path = battle.GetMovePath(battle.currentUnit, end);
+    battle.MoveUnit(battle.currentUnit, path);
+
+    // Delete tiles
+    foreach (Transform tile in tileTransform)
+      Destroy(tile.gameObject);
+  }
+
+  public void OnMoveFinish() {
+    onUnitCommands = true;
+    whileUnitMove = false;
+  }
+
   public void OnMoveCancel() {
     cam.SetMenuMode(true);
     onUnitMove = false;
@@ -126,8 +150,14 @@ public class Wand : MonoBehaviour {
   }
 
   public void KeyInputs() {
-    if ((onUnitLook && targetUnit != null) && Input.GetKeyDown("x"))
-      OnStatus();
+    if (Input.GetKeyDown("x")) {
+
+      if (onUnitLook && targetUnit != null)
+        OnStatus();
+
+      if (onUnitMove && targetTiles.Contains(battle.GetTile(transform.position)))
+        OnMoveConfirm();
+    }
 
     if (Input.GetKeyDown("z")) {
 
@@ -142,6 +172,8 @@ public class Wand : MonoBehaviour {
     }
   }
 
+
+
   /* Wand UI */
   [Header("UI: Unit Panel Left")]
   public GameObject unitPanelL;
@@ -151,6 +183,7 @@ public class Wand : MonoBehaviour {
   public GameObject unitWait;
   public GameObject unitStatusKey;
   public GameObject unitCancelKey;
+  public GameObject unitMoveKey;
 
   [Header("UI: Unit Status")]
   public GameObject unitStatus;
@@ -161,13 +194,15 @@ public class Wand : MonoBehaviour {
     unitWait.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitStatusKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitCancelKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitMoveKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitStatus.GetComponent<Animator>().Play("SlideOut", -1, 1f);
   }
 
   private void UpdateUI() {
 
-    // Update targetUnit
+    // Update targetUnit and targetTile
     BattleUnit newTargetUnit = battle.GetUnit(transform.position);
+    TileNode targetTile = battle.GetTile(transform.position);
 
     // Update UI for targetUnit
 
@@ -244,6 +279,19 @@ public class Wand : MonoBehaviour {
 
     if ((onUnitLook || onStatusScreen || onUnitMove) && uckAnimState.IsName("SlideOut") && uckAnimState.normalizedTime > 1f) {
       uckAnim.Play("SlideIn");
+    }
+
+    // UI: Unit Move Key
+    Animator umkAnim = unitMoveKey.GetComponent<Animator>();
+    AnimatorStateInfo umkAnimState = umkAnim.GetCurrentAnimatorStateInfo(0);
+
+    if (!(onUnitMove && targetTiles.Contains(targetTile)) && umkAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - umkAnimState.normalizedTime, 0f);
+      umkAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if ((onUnitMove && targetTiles.Contains(targetTile)) && umkAnimState.IsName("SlideOut") && umkAnimState.normalizedTime > 1f) {
+      umkAnim.Play("SlideIn");
     }
 
     // UI: Unit Status Screen

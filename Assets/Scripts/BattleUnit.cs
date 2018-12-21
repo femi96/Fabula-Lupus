@@ -19,4 +19,9 @@ public class BattleUnit {
   public override string ToString() {
     return unit.ToString();
   }
+
+  public void Move(Vector3 dest, Vector2Int pos) {
+    body.transform.position = dest;
+    position = pos;
+  }
 }

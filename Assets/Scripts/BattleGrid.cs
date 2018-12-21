@@ -11,7 +11,6 @@ public class BattleGrid : MonoBehaviour {
     AddUnits();
   }
 
-  void Update() {}
 
 
   /* Units */
@@ -64,6 +63,29 @@ public class BattleGrid : MonoBehaviour {
       highestUnit.unit.speedTemp -= 8;
     }
   }
+
+  public bool isMovingUnit = false;
+  private BattleUnit movingUnit;
+  private List<TileNode> movingPath;
+
+  public void MoveUnit(BattleUnit unit, List<TileNode> path) {
+    isMovingUnit = true;
+    movingUnit = unit;
+    movingPath = path;
+  }
+
+  void Update() {
+    if (isMovingUnit) {
+      TileNode current = movingPath[0];
+      movingPath.RemoveAt(0);
+      movingUnit.Move(current.GetPos(), Vector3ToKey(current.GetPos()));
+
+      if (movingPath.Count == 0)
+        isMovingUnit = false;
+    }
+  }
+
+
 
   /* Tiles */
   private Dictionary<Vector2Int, TileNode> tileDict;
@@ -163,6 +185,15 @@ public class BattleGrid : MonoBehaviour {
     foreach (BattleUnit unit in units)
       if (unit.position == k)
         return unit;
+
+    return null;
+  }
+
+  public TileNode GetTile(Vector3 v) {
+    Vector2Int k = Vector3ToKey(v);
+
+    if (tileDict.ContainsKey(k))
+      return tileDict[k];
 
     return null;
   }
