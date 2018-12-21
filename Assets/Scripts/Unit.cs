@@ -19,6 +19,7 @@ public class Unit {
   public float move;
   public float jump;
   public int healthCur, healthMax, manaCur, manaMax, speedCur, speedMax, speedTemp;
+  public int apCur, apMax;
 
   public List<Action> actions;
   public List<Passive> passives;
@@ -51,6 +52,9 @@ public class Unit {
     speedMax = stats[Stat.Rea] + stats[Stat.Int];
     speedCur = speedMax;
     speedTemp = speedCur;
+
+    apMax = 2;
+    apCur = apMax;
 
     type = new List<UnitType>();
     type.Add(UnitType.Grass);

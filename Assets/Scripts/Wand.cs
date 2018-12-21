@@ -239,6 +239,8 @@ public class Wand : MonoBehaviour {
     }
 
     if (onUnitCommands && targetUnit == battle.currentUnit && ucmAnimState.IsName("SlideOut") && ucmAnimState.normalizedTime > 1f) {
+      unitCommandsMenu.transform.Find("BackImage/MoveButton").gameObject.GetComponent<Button>().interactable = targetUnit.unit.apCur > 0;
+
       ucmAnim.Play("SlideIn");
     }
 

@@ -12,7 +12,6 @@ public class BattleGrid : MonoBehaviour {
   }
 
 
-
   /* Units */
   private List<BattleUnit> units;
   private List<BattleUnit> unitQueue;
@@ -74,6 +73,7 @@ public class BattleGrid : MonoBehaviour {
     movingUnit = unit;
     movingPath = path;
     moveTime = 0;
+    movingUnit.unit.apCur -= 1;
   }
 
   void Update() {
