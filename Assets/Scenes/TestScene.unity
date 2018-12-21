@@ -973,7 +973,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1255765645861494, guid: efe4a871de38f2f428d7633af99004e2, type: 2}
       propertyPath: m_Name
-      value: UnitLookCancel
+      value: UnitCancelKey
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: efe4a871de38f2f428d7633af99004e2, type: 2}
@@ -1185,6 +1185,11 @@ Prefab:
       propertyPath: unitStatus
       value: 
       objectReference: {fileID: 1949636644}
+    - target: {fileID: 114679179962646102, guid: 0906a937d3865d44a9c5b6a17040b87d,
+        type: 2}
+      propertyPath: unitCancelKey
+      value: 
+      objectReference: {fileID: 1358070119}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0906a937d3865d44a9c5b6a17040b87d, type: 2}
   m_IsPrefabParent: 0
@@ -1720,7 +1725,7 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114619184641913080, guid: 70294e12e802f0e4289200192f3b075c,
+    - target: {fileID: 114148117967270972, guid: 70294e12e802f0e4289200192f3b075c,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1730,19 +1735,15 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2072398362}
+    - target: {fileID: 114619184641913080, guid: 70294e12e802f0e4289200192f3b075c,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2072398362}
     - target: {fileID: 1430068667096470, guid: 70294e12e802f0e4289200192f3b075c, type: 2}
       propertyPath: m_Name
       value: UnitCommandsMenu
       objectReference: {fileID: 0}
-    - target: {fileID: 1430068667096470, guid: 70294e12e802f0e4289200192f3b075c, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 95027262133282226, guid: 70294e12e802f0e4289200192f3b075c,
-        type: 2}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 0a7e9a436bf784a44bc6d4355146f5a1, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 70294e12e802f0e4289200192f3b075c, type: 2}
   m_IsPrefabParent: 0

@@ -16,7 +16,7 @@ public class Unit {
   public int level, exp;
   public Dictionary<Stat, int> stats;
   public List<UnitType> type;
-  public int move;
+  public float move;
   public float jump;
   public int healthCur, healthMax, manaCur, manaMax, speedCur, speedMax, speedTemp;
 
@@ -41,7 +41,7 @@ public class Unit {
     stats.Add(Stat.Wil, Random.Range(3, 8));
     stats.Add(Stat.Cha, Random.Range(3, 8));
 
-    move = 3;
+    move = 2f;
     jump = 0.5f;
 
     healthMax = 40 + stats[Stat.Con] * 3 + stats[Stat.Str];

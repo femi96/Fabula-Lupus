@@ -6,7 +6,7 @@ using UnityEngine;
 public class TileNode {
 
   private Vector3 pos;
-  private List<TileEdge> edges;
+  public List<TileEdge> edges;
   private Vector2Int key;
 
   public TileNode(Vector3 v) {

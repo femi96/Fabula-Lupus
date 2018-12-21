@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -164,5 +165,48 @@ public class BattleGrid : MonoBehaviour {
         return unit;
 
     return null;
+  }
+
+  public HashSet<TileNode> GetMoveTiles(BattleUnit bu) {
+    // Use Dijkstra's alg to get tiles in range
+    float move = bu.unit.move;
+    float jump = bu.unit.jump;
+
+    // Initial collection values
+    List<TileNode> queue = new List<TileNode>();
+    HashSet<TileNode> visited = new HashSet<TileNode>();
+    // Dictionary<TileNode, TileNode> previous = new Dictionary<TileNode, TileNode>();
+    Dictionary<TileNode, float> distances = new Dictionary<TileNode, float>();
+
+    foreach (TileNode node in tileDict.Values) {
+      distances.Add(node, float.MaxValue);
+    }
+
+    distances[tileDict[bu.position]] = 0f;
+    queue.Add(tileDict[bu.position]);
+
+    // Start search
+    while (queue.Count != 0) {
+      queue = queue.OrderBy(node => distances[node]).ToList();
+      TileNode current = queue[0];
+      queue.RemoveAt(0);
+      visited.Add(current);
+
+      float baseDist = distances[current];
+
+      foreach (TileEdge edge in current.edges) {
+        float edgeDist = baseDist + edge.GetWeight();
+        TileNode node = edge.GetNode();
+
+        if (edgeDist <= move && edgeDist <= distances[node]) {
+          queue.Add(node);
+          distances[node] = edgeDist;
+        }
+      }
+    }
+
+    // Remove initial and return
+    visited.Remove(tileDict[bu.position]);
+    return visited;
   }
 }
