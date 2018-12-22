@@ -240,6 +240,17 @@ public class Wand : MonoBehaviour {
 
     if (onUnitCommands && targetUnit == battle.currentUnit && ucmAnimState.IsName("SlideOut") && ucmAnimState.normalizedTime > 1f) {
       unitCommandsMenu.transform.Find("BackImage/MoveButton").gameObject.GetComponent<Button>().interactable = targetUnit.unit.apCur > 0;
+      unitCommandsMenu.transform.Find("BackImage/ActButton").gameObject.GetComponent<Button>().interactable = targetUnit.unit.apCur > 0;
+      unitCommandsMenu.transform.Find("BackImage/APImage/Text").gameObject.GetComponent<Text>().text = targetUnit.unit.apCur.ToString();
+      Color apColor = new Color(24f / 256, 115f / 256, 20f / 256);
+
+      if (targetUnit.unit.apCur == 1)
+        apColor = new Color(0.75f, 0.75f, 0.25f);
+
+      if (targetUnit.unit.apCur == 0)
+        apColor = new Color(0.75f, 0.15f, 0.15f);
+
+      unitCommandsMenu.transform.Find("BackImage/APImage/Text").gameObject.GetComponent<Text>().color = apColor;
 
       ucmAnim.Play("SlideIn");
     }
