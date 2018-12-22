@@ -232,16 +232,18 @@ public class BattleGrid : MonoBehaviour {
       visited.Add(current);
 
       float baseDist = distances[current];
+      float baseHeight = current.GetPos().y;
 
       foreach (TileEdge edge in current.edges) {
         float edgeDist = baseDist + edge.GetWeight();
         TileNode node = edge.GetNode();
+        float height = Mathf.Abs(node.GetPos().y - baseHeight);
 
         // Unit blocking
         BattleUnit blockingUnit = GetUnit(node.GetPos());
         bool blocked = (blockingUnit != null && blockingUnit.team != bu.team);
 
-        if (edgeDist <= move && edgeDist <= distances[node] && !blocked) {
+        if (edgeDist <= move && edgeDist <= distances[node] && height <= jump && !blocked) {
           if (!previous.ContainsKey(node))
             queue.Add(node);
 
@@ -286,16 +288,18 @@ public class BattleGrid : MonoBehaviour {
         break;
 
       float baseDist = distances[current];
+      float baseHeight = current.GetPos().y;
 
       foreach (TileEdge edge in current.edges) {
         float edgeDist = baseDist + edge.GetWeight();
         TileNode node = edge.GetNode();
+        float height = Mathf.Abs(node.GetPos().y - baseHeight);
 
         // Unit blocking
         BattleUnit blockingUnit = GetUnit(node.GetPos());
         bool blocked = (blockingUnit != null && blockingUnit.team != bu.team);
 
-        if (edgeDist <= move && edgeDist <= distances[node] && !blocked) {
+        if (edgeDist <= move && edgeDist <= distances[node] && height <= jump && !blocked) {
           if (!previous.ContainsKey(node))
             queue.Add(node);
 
