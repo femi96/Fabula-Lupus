@@ -34,6 +34,7 @@ public class BattleGrid : MonoBehaviour {
       UpdateUnitQueue();
 
     currentUnit = unitQueue[0];
+    currentUnit.unit.apCur = currentUnit.unit.apMax;
     unitQueue.RemoveAt(0);
   }
 
