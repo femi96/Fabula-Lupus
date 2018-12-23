@@ -43,6 +43,7 @@ public class Wand : MonoBehaviour {
   public bool onStatusScreen = false;
   public bool onUnitMove = false;
   public bool whileUnitMove = false;
+  public bool onUnitActions = false;
 
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
@@ -101,6 +102,16 @@ public class Wand : MonoBehaviour {
     cam.SetMenuMode(false);
     onStatusScreen = false;
     onUnitLook = true;
+  }
+
+  public void OnAct() {
+    onUnitActions = true;
+    onUnitCommands = false;
+  }
+
+  public void OnActCancel() {
+    onUnitActions = false;
+    onUnitCommands = true;
   }
 
   public void OnMove() {
@@ -188,6 +199,10 @@ public class Wand : MonoBehaviour {
   [Header("UI: Unit Status")]
   public GameObject unitStatus;
 
+  [Header("UI: Unit Actions")]
+  public GameObject unitActions;
+  public GameObject unitActionPrefab;
+
   private void StartUI() {
     unitPanelL.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitCommandsMenu.GetComponent<Animator>().Play("SlideOut", -1, 1f);
@@ -196,6 +211,7 @@ public class Wand : MonoBehaviour {
     unitCancelKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitMoveKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitStatus.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitActions.GetComponent<Animator>().Play("SlideOut", -1, 1f);
   }
 
   private void UpdateUI() {
@@ -319,6 +335,19 @@ public class Wand : MonoBehaviour {
     if (onStatusScreen && usAnimState.IsName("SlideOut") && usAnimState.normalizedTime > 1f) {
       newTargetUnit.unit.SetStatusUI(unitStatus);
       usAnim.Play("SlideIn");
+    }
+
+    // UI: Unit Action Menu
+    Animator uaAnim = unitActions.GetComponent<Animator>();
+    AnimatorStateInfo uaAnimState = uaAnim.GetCurrentAnimatorStateInfo(0);
+
+    if (!onUnitActions && uaAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - uaAnimState.normalizedTime, 0f);
+      uaAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if (onUnitActions && uaAnimState.IsName("SlideOut") && uaAnimState.normalizedTime > 1f) {
+      uaAnim.Play("SlideIn");
     }
   }
 
