@@ -220,6 +220,7 @@ MonoBehaviour:
   onUnitMove: 0
   whileUnitMove: 0
   onUnitActions: 0
+  onUnitAction: 0
   tilePrefab: {fileID: 1340462263065930, guid: ad08bc1178dd97b46bafde6c9c02b64f, type: 2}
   tileTransform: {fileID: 0}
   unitPanelL: {fileID: 0}
@@ -230,4 +231,7 @@ MonoBehaviour:
   unitMoveKey: {fileID: 0}
   unitStatus: {fileID: 0}
   unitActions: {fileID: 0}
-  unitActionPrefab: {fileID: 0}
+  unitActionPrefab: {fileID: 1696530998836528, guid: 4a4aba9cf9baae94db49c6994b02de8c,
+    type: 2}
+  unitActionsContent: {fileID: 0}
+  unitActionKey: {fileID: 0}

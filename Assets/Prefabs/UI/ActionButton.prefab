@@ -102,7 +102,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '> Act'
+  m_Text: Action
 --- !u!222 &222045280276853908
 CanvasRenderer:
   m_ObjectHideFlags: 1

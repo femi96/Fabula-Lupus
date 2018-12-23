@@ -61,6 +61,11 @@ public class Unit {
     type.Add(UnitType.Normal);
 
     actions = new List<Action>();
+    actions.Add(new TestAction());
+    actions.Add(new TestAction());
+    actions.Add(new TestAction());
+    actions.Add(new TestAction());
+
     passives = new List<Passive>();
   }
 

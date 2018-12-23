@@ -44,10 +44,13 @@ public class Wand : MonoBehaviour {
   public bool onUnitMove = false;
   public bool whileUnitMove = false;
   public bool onUnitActions = false;
+  public bool onUnitAction = false;
 
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
   public Transform tileTransform;
+
+  private Action currentAction;
 
   private void PassUnit() {
     onUnitCommands = true;
@@ -114,6 +117,33 @@ public class Wand : MonoBehaviour {
     onUnitCommands = true;
   }
 
+  public void OnAction(Action action) {
+    cam.SetMenuMode(false);
+    onUnitAction = true;
+    onUnitActions = false;
+
+    currentAction = action;
+    // Do thing with action.GetActionType();
+    targetTiles = action.GetSelectionTiles(battle.currentUnit);
+  }
+
+  public void OnActionCancel() {
+    cam.SetMenuMode(true);
+    onUnitAction = false;
+    onUnitActions = true;
+
+    // Move wand
+    Vector2Int pos = battle.currentUnit.position;
+    transform.position = new Vector3(pos.x, 0, pos.y);
+  }
+
+  public void OnExecuteAction() {
+    cam.SetMenuMode(true);
+    Debug.Log(currentAction);
+    onUnitAction = false;
+    onUnitCommands = true;
+  }
+
   public void OnMove() {
     cam.SetMenuMode(false);
     onUnitMove = true;
@@ -168,6 +198,9 @@ public class Wand : MonoBehaviour {
 
       if (onUnitMove && targetTiles.Contains(battle.GetTile(transform.position)))
         OnMoveConfirm();
+
+      if (onUnitAction && targetTiles.Contains(battle.GetTile(transform.position)))
+        return;
     }
 
     if (Input.GetKeyDown("z")) {
@@ -180,6 +213,9 @@ public class Wand : MonoBehaviour {
 
       if (onUnitMove)
         OnMoveCancel();
+
+      if (onUnitAction)
+        OnActionCancel();
     }
   }
 
@@ -202,6 +238,9 @@ public class Wand : MonoBehaviour {
   [Header("UI: Unit Actions")]
   public GameObject unitActions;
   public GameObject unitActionPrefab;
+  public Transform unitActionsContent;
+
+  public GameObject unitActionKey;
 
   private void StartUI() {
     unitPanelL.GetComponent<Animator>().Play("SlideOut", -1, 1f);
@@ -212,6 +251,7 @@ public class Wand : MonoBehaviour {
     unitMoveKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitStatus.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitActions.GetComponent<Animator>().Play("SlideOut", -1, 1f);
+    unitActionKey.GetComponent<Animator>().Play("SlideOut", -1, 1f);
   }
 
   private void UpdateUI() {
@@ -301,12 +341,12 @@ public class Wand : MonoBehaviour {
     Animator uckAnim = unitCancelKey.GetComponent<Animator>();
     AnimatorStateInfo uckAnimState = uckAnim.GetCurrentAnimatorStateInfo(0);
 
-    if (!(onUnitLook || onStatusScreen || onUnitMove) && uckAnimState.IsName("SlideIn")) {
+    if (!(onUnitLook || onStatusScreen || onUnitMove || onUnitAction) && uckAnimState.IsName("SlideIn")) {
       float animTime = Mathf.Max(1f - uckAnimState.normalizedTime, 0f);
       uckAnim.Play("SlideOut", -1, animTime);
     }
 
-    if ((onUnitLook || onStatusScreen || onUnitMove) && uckAnimState.IsName("SlideOut") && uckAnimState.normalizedTime > 1f) {
+    if ((onUnitLook || onStatusScreen || onUnitMove || onUnitAction) && uckAnimState.IsName("SlideOut") && uckAnimState.normalizedTime > 1f) {
       uckAnim.Play("SlideIn");
     }
 
@@ -321,6 +361,19 @@ public class Wand : MonoBehaviour {
 
     if ((onUnitMove && targetTiles.Contains(targetTile)) && umkAnimState.IsName("SlideOut") && umkAnimState.normalizedTime > 1f) {
       umkAnim.Play("SlideIn");
+    }
+
+    // UI: Unit Action Key
+    Animator uakAnim = unitActionKey.GetComponent<Animator>();
+    AnimatorStateInfo uakAnimState = uakAnim.GetCurrentAnimatorStateInfo(0);
+
+    if (!(onUnitAction && targetTiles.Contains(targetTile)) && uakAnimState.IsName("SlideIn")) {
+      float animTime = Mathf.Max(1f - uakAnimState.normalizedTime, 0f);
+      uakAnim.Play("SlideOut", -1, animTime);
+    }
+
+    if ((onUnitAction && targetTiles.Contains(targetTile)) && uakAnimState.IsName("SlideOut") && uakAnimState.normalizedTime > 1f) {
+      uakAnim.Play("SlideIn");
     }
 
     // UI: Unit Status Screen
@@ -347,6 +400,16 @@ public class Wand : MonoBehaviour {
     }
 
     if (onUnitActions && uaAnimState.IsName("SlideOut") && uaAnimState.normalizedTime > 1f) {
+
+      foreach (Transform action in unitActionsContent)
+        Destroy(action.gameObject);
+
+      foreach (Action action in targetUnit.unit.actions) {
+        GameObject go = Instantiate(unitActionPrefab, unitActionsContent);
+        go.GetComponent<Text>().text = action.GetName();
+        go.GetComponent<Button>().onClick.AddListener(() => OnAction(action));
+      }
+
       uaAnim.Play("SlideIn");
     }
   }
@@ -363,7 +426,7 @@ public class Wand : MonoBehaviour {
   private void MoveWand() {
     moveTime += Time.deltaTime;
 
-    if (!onUnitCommands && !onUnitWait)
+    if (onUnitLook || onUnitMove || onUnitAction)
       MoveWandFromInput();
 
     // If not moving, move to lock
