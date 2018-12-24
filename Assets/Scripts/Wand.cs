@@ -63,10 +63,13 @@ public class Wand : MonoBehaviour {
   private void PassUnit() {
     battle.NextCurrentUnit();
 
-    if (battle.currentUnit.team == 0)
+    if (battle.currentUnit.team == 0) {
       onUnitCommands = true;
-    else
+      whileAIControl = false;
+    } else {
+      onUnitCommands = false;
       whileAIControl = true;
+    }
 
     // Camera mode
     cam.SetMenuMode(true);
