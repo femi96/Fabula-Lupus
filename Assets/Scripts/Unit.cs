@@ -33,21 +33,21 @@ public class Unit {
     exp = 0;
 
     stats = new Dictionary<Stat, int>();
-    stats.Add(Stat.Con, Random.Range(3, 8));
-    stats.Add(Stat.Str, Random.Range(3, 8));
-    stats.Add(Stat.Agi, Random.Range(3, 8));
-    stats.Add(Stat.Rea, Random.Range(3, 8));
-    stats.Add(Stat.Mnd, Random.Range(3, 8));
-    stats.Add(Stat.Int, Random.Range(3, 8));
-    stats.Add(Stat.Wil, Random.Range(3, 8));
-    stats.Add(Stat.Cha, Random.Range(3, 8));
+    stats.Add(Stat.Con, Random.Range(1, 11));
+    stats.Add(Stat.Str, Random.Range(1, 11));
+    stats.Add(Stat.Agi, Random.Range(1, 11));
+    stats.Add(Stat.Rea, Random.Range(1, 11));
+    stats.Add(Stat.Mnd, Random.Range(1, 11));
+    stats.Add(Stat.Int, Random.Range(1, 11));
+    stats.Add(Stat.Wil, Random.Range(1, 11));
+    stats.Add(Stat.Cha, Random.Range(1, 11));
 
     move = 2f;
     jump = 0.5f;
 
-    healthMax = 40 + stats[Stat.Con] * 3 + stats[Stat.Str];
+    healthMax = 14 + stats[Stat.Con] * 5 + stats[Stat.Str] + stats[Stat.Agi] / 2;
     healthCur = healthMax;
-    manaMax = 10 + stats[Stat.Mnd] * 3 + stats[Stat.Int];
+    manaMax = 5 + stats[Stat.Wil] * 5 + stats[Stat.Mnd] + stats[Stat.Int] / 3;
     manaCur = manaMax;
     speedMax = stats[Stat.Rea] + stats[Stat.Int];
     speedCur = speedMax;
