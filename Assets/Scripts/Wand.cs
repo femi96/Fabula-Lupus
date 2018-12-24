@@ -34,7 +34,7 @@ public class Wand : MonoBehaviour {
     }
   }
 
-  /* Game Change */
+  /* Game State */
   private BattleUnit targetUnit;
 
   public bool onUnitCommands = false;
@@ -64,6 +64,8 @@ public class Wand : MonoBehaviour {
     transform.position = new Vector3(pos.x, 0, pos.y);
   }
 
+
+  /* Player Input Listeners */
   public void OnWait() {
     onUnitWait = true;
     onUnitCommands = false;
@@ -124,7 +126,10 @@ public class Wand : MonoBehaviour {
 
     currentAction = action;
     // Do thing with action.GetActionType();
-    targetTiles = action.GetSelectionTiles(battle.currentUnit);
+    targetTiles = action.GetSelectionTiles(battle.currentUnit, battle);
+
+    foreach (TileNode tile in targetTiles)
+      Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
   }
 
   public void OnActionCancel() {
@@ -135,6 +140,10 @@ public class Wand : MonoBehaviour {
     // Move wand
     Vector2Int pos = battle.currentUnit.position;
     transform.position = new Vector3(pos.x, 0, pos.y);
+
+    // Delete tiles
+    foreach (Transform tile in tileTransform)
+      Destroy(tile.gameObject);
   }
 
   public void OnExecuteAction() {
@@ -142,6 +151,10 @@ public class Wand : MonoBehaviour {
     Debug.Log(currentAction);
     onUnitAction = false;
     onUnitCommands = true;
+
+    // Delete tiles
+    foreach (Transform tile in tileTransform)
+      Destroy(tile.gameObject);
   }
 
   public void OnMove() {
@@ -200,7 +213,7 @@ public class Wand : MonoBehaviour {
         OnMoveConfirm();
 
       if (onUnitAction && targetTiles.Contains(battle.GetTile(transform.position)))
-        return;
+        OnExecuteAction();
     }
 
     if (Input.GetKeyDown("z")) {
@@ -438,7 +451,7 @@ public class Wand : MonoBehaviour {
 
   }
 
-// Move wand with inputs
+  // Move wand with inputs
   private void MoveWandFromInput() {
 
     // Transform input direction based on camera forward
@@ -467,7 +480,7 @@ public class Wand : MonoBehaviour {
     transform.Translate(moveDirection.x, 0, moveDirection.z);
   }
 
-// If not moving, move to lock
+  // If not moving, move to lock
   private void MoveWandToTile() {
 
     float deltaX = Mathf.RoundToInt(transform.position.x) - transform.position.x;

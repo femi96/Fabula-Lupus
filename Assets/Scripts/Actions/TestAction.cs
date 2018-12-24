@@ -12,8 +12,9 @@ public class TestAction : Action {
     return ActionType.Fixed;
   }
 
-  public override HashSet<TileNode> GetSelectionTiles(BattleUnit user) {
+  public override HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle) {
     HashSet<TileNode> set = new HashSet<TileNode>();
+    set.Add(battle.GetTile(user.position));
     return set;
   }
 

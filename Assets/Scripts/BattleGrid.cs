@@ -11,7 +11,6 @@ public class BattleGrid : MonoBehaviour {
     AddUnits();
   }
 
-
   /* Units */
   private List<BattleUnit> units;
   private List<BattleUnit> unitQueue;
@@ -198,7 +197,10 @@ public class BattleGrid : MonoBehaviour {
 
   public TileNode GetTile(Vector3 v) {
     Vector2Int k = Vector3ToKey(v);
+    return GetTile(k);
+  }
 
+  public TileNode GetTile(Vector2Int k) {
     if (tileDict.ContainsKey(k))
       return tileDict[k];
 

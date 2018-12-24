@@ -10,7 +10,7 @@ public abstract class Action {
 
   public abstract ActionType GetActionType();
 
-  public abstract HashSet<TileNode> GetSelectionTiles(BattleUnit user);
+  public abstract HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle);
 
   public abstract void ApplyAction(List<TileNode> targets);
 }
