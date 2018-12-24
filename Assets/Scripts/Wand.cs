@@ -126,7 +126,7 @@ public class Wand : MonoBehaviour {
 
     currentAction = action;
     // Do thing with action.GetActionType();
-    targetTiles = action.GetSelectionTiles(battle.currentUnit, battle);
+    targetTiles = currentAction.GetSelectionTiles(battle.currentUnit, battle);
 
     foreach (TileNode tile in targetTiles)
       Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
@@ -212,8 +212,13 @@ public class Wand : MonoBehaviour {
       if (onUnitMove && targetTiles.Contains(battle.GetTile(transform.position)))
         OnMoveConfirm();
 
-      if (onUnitAction && targetTiles.Contains(battle.GetTile(transform.position)))
-        OnExecuteAction();
+      if (onUnitAction) {
+        if (currentAction.GetActionType() == ActionType.Targeted && targetTiles.Contains(battle.GetTile(transform.position)))
+          OnExecuteAction();
+
+        if (currentAction.GetActionType() == ActionType.Fixed)
+          OnExecuteAction();
+      }
     }
 
     if (Input.GetKeyDown("z")) {
@@ -379,13 +384,15 @@ public class Wand : MonoBehaviour {
     // UI: Unit Action Key
     Animator uakAnim = unitActionKey.GetComponent<Animator>();
     AnimatorStateInfo uakAnimState = uakAnim.GetCurrentAnimatorStateInfo(0);
+    bool canConfirmAction = (onUnitAction && (currentAction.GetActionType() == ActionType.Fixed
+                             || (currentAction.GetActionType() == ActionType.Targeted && targetTiles.Contains(targetTile))));
 
-    if (!(onUnitAction && targetTiles.Contains(targetTile)) && uakAnimState.IsName("SlideIn")) {
+    if (!canConfirmAction && uakAnimState.IsName("SlideIn")) {
       float animTime = Mathf.Max(1f - uakAnimState.normalizedTime, 0f);
       uakAnim.Play("SlideOut", -1, animTime);
     }
 
-    if ((onUnitAction && targetTiles.Contains(targetTile)) && uakAnimState.IsName("SlideOut") && uakAnimState.normalizedTime > 1f) {
+    if (canConfirmAction && uakAnimState.IsName("SlideOut") && uakAnimState.normalizedTime > 1f) {
       uakAnim.Play("SlideIn");
     }
 

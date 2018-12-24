@@ -9,7 +9,7 @@ public class TestAction : Action {
   }
 
   public override ActionType GetActionType() {
-    return ActionType.Fixed;
+    return ActionType.Targeted;
   }
 
   public override HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle) {
@@ -18,7 +18,7 @@ public class TestAction : Action {
     return set;
   }
 
-  public override void ApplyAction(List<TileNode> targets) {
+  public override void ApplyAction(List<TileNode> targets, BattleGrid battle) {
     return;
   }
 }
