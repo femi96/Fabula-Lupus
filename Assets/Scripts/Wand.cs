@@ -25,6 +25,9 @@ public class Wand : MonoBehaviour {
     if (whileUnitMove && !battle.isMovingUnit)
       OnMoveFinish();
 
+    if (whileUnitAction && !battle.isActingUnit)
+      OnActionFinish();
+
     MoveWand();
     KeyInputs();
     UpdateUI();
@@ -45,6 +48,7 @@ public class Wand : MonoBehaviour {
   public bool whileUnitMove = false;
   public bool onUnitActions = false;
   public bool onUnitAction = false;
+  public bool whileUnitAction = false;
 
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
@@ -132,10 +136,13 @@ public class Wand : MonoBehaviour {
       Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
   }
 
-  public void OnActionCancel() {
+  public void OnActionConfirm() {
     cam.SetMenuMode(true);
+    Debug.Log(currentAction);
     onUnitAction = false;
-    onUnitActions = true;
+    whileUnitAction = true;
+
+    currentAction.ApplyAction(battle.GetTile(transform.position), battle);
 
     // Move wand
     Vector2Int pos = battle.currentUnit.position;
@@ -146,11 +153,19 @@ public class Wand : MonoBehaviour {
       Destroy(tile.gameObject);
   }
 
-  public void OnExecuteAction() {
-    cam.SetMenuMode(true);
-    Debug.Log(currentAction);
-    onUnitAction = false;
+  public void OnActionFinish() {
+    whileUnitAction = false;
     onUnitCommands = true;
+  }
+
+  public void OnActionCancel() {
+    cam.SetMenuMode(true);
+    onUnitAction = false;
+    onUnitActions = true;
+
+    // Move wand
+    Vector2Int pos = battle.currentUnit.position;
+    transform.position = new Vector3(pos.x, 0, pos.y);
 
     // Delete tiles
     foreach (Transform tile in tileTransform)
@@ -214,10 +229,10 @@ public class Wand : MonoBehaviour {
 
       if (onUnitAction) {
         if (currentAction.GetActionType() == ActionType.Targeted && targetTiles.Contains(battle.GetTile(transform.position)))
-          OnExecuteAction();
+          OnActionConfirm();
 
         if (currentAction.GetActionType() == ActionType.Fixed)
-          OnExecuteAction();
+          OnActionConfirm();
       }
     }
 

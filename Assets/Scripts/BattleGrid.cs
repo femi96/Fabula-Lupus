@@ -68,6 +68,8 @@ public class BattleGrid : MonoBehaviour {
   private List<TileNode> movingPath;
   private int moveTime = 0;
 
+  public bool isActingUnit = false;
+
   public void MoveUnit(BattleUnit unit, List<TileNode> path) {
     isMovingUnit = true;
     movingUnit = unit;

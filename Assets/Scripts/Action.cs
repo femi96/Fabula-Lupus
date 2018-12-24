@@ -12,5 +12,11 @@ public abstract class Action {
 
   public abstract HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle);
 
+  public void ApplyAction(TileNode target, BattleGrid battle) {
+    List<TileNode> targets = new List<TileNode>();
+    targets.Add(target);
+    ApplyAction(targets, battle);
+  }
+
   public abstract void ApplyAction(List<TileNode> targets, BattleGrid battle);
 }
