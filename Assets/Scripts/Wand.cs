@@ -81,10 +81,10 @@ public class Wand : MonoBehaviour {
   }
 
   private void ClearTargetTiles() {
-    SetTargetTiles(new List<TileNode>());
+    SetTargetTiles(new HashSet<TileNode>());
   }
 
-  private void SetTargetTiles(List<TileNode> tiles) {
+  private void SetTargetTiles(HashSet<TileNode> tiles) {
     targetTiles = tiles;
 
     // Delete tiles
