@@ -70,6 +70,8 @@ public class BattleGrid : MonoBehaviour {
 
   public bool isActingUnit = false;
 
+  public bool isControllingUnit = false;
+
   public void MoveUnit(BattleUnit unit, List<TileNode> path) {
     isMovingUnit = true;
     movingUnit = unit;

@@ -28,6 +28,9 @@ public class Wand : MonoBehaviour {
     if (whileUnitAction && !battle.isActingUnit)
       OnActionFinish();
 
+    if (whileAIControl && !battle.isControllingUnit)
+      PassUnit();
+
     MoveWand();
     KeyInputs();
     UpdateUI();
@@ -49,6 +52,7 @@ public class Wand : MonoBehaviour {
   public bool onUnitActions = false;
   public bool onUnitAction = false;
   public bool whileUnitAction = false;
+  public bool whileAIControl = false;
 
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
@@ -57,8 +61,12 @@ public class Wand : MonoBehaviour {
   private Action currentAction;
 
   private void PassUnit() {
-    onUnitCommands = true;
     battle.NextCurrentUnit();
+
+    if (battle.currentUnit.team == 0)
+      onUnitCommands = true;
+    else
+      whileAIControl = true;
 
     // Camera mode
     cam.SetMenuMode(true);
