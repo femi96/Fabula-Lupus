@@ -71,12 +71,29 @@ public class Wand : MonoBehaviour {
       whileAIControl = true;
     }
 
-    // Camera mode
     cam.SetMenuMode(true);
+    ResetWandToUnit();
+  }
 
-    // Move wand
+  private void ResetWandToUnit() {
     Vector2Int pos = battle.currentUnit.position;
     transform.position = new Vector3(pos.x, 0, pos.y);
+  }
+
+  private void ClearTargetTiles() {
+    SetTargetTiles(new List<TileNode>());
+  }
+
+  private void SetTargetTiles(List<TileNode> tiles) {
+    targetTiles = tiles;
+
+    // Delete tiles
+    foreach (Transform tile in tileTransform)
+      Destroy(tile.gameObject);
+
+    // Place tiles
+    foreach (TileNode tile in targetTiles)
+      Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
   }
 
 
@@ -97,31 +114,28 @@ public class Wand : MonoBehaviour {
   }
 
   public void OnLook() {
-    cam.SetMenuMode(false);
     onUnitLook = true;
     onUnitCommands = false;
+    cam.SetMenuMode(false);
   }
 
   public void OnLookCancel() {
-    cam.SetMenuMode(true);
     onUnitLook = false;
     onUnitCommands = true;
-
-    // Move wand
-    Vector2Int pos = battle.currentUnit.position;
-    transform.position = new Vector3(pos.x, 0, pos.y);
+    cam.SetMenuMode(true);
+    ResetWandToUnit();
   }
 
   public void OnStatus() {
-    cam.SetMenuMode(true);
     onStatusScreen = true;
     onUnitLook = false;
+    cam.SetMenuMode(true);
   }
 
   public void OnStatusCancel() {
-    cam.SetMenuMode(false);
     onStatusScreen = false;
     onUnitLook = true;
+    cam.SetMenuMode(false);
   }
 
   public void OnAct() {
@@ -135,33 +149,24 @@ public class Wand : MonoBehaviour {
   }
 
   public void OnAction(Action action) {
-    cam.SetMenuMode(false);
     onUnitAction = true;
     onUnitActions = false;
+    cam.SetMenuMode(false);
 
     currentAction = action;
-    // Do thing with action.GetActionType();
-    targetTiles = currentAction.GetSelectionTiles(battle.currentUnit, battle);
-
-    foreach (TileNode tile in targetTiles)
-      Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
+    SetTargetTiles(currentAction.GetSelectionTiles(battle.currentUnit, battle));
   }
 
   public void OnActionConfirm() {
-    cam.SetMenuMode(true);
     Debug.Log(currentAction);
     onUnitAction = false;
     whileUnitAction = true;
 
     currentAction.ApplyAction(battle.GetTile(transform.position), battle);
 
-    // Move wand
-    Vector2Int pos = battle.currentUnit.position;
-    transform.position = new Vector3(pos.x, 0, pos.y);
-
-    // Delete tiles
-    foreach (Transform tile in tileTransform)
-      Destroy(tile.gameObject);
+    cam.SetMenuMode(true);
+    ResetWandToUnit();
+    ClearTargetTiles();
   }
 
   public void OnActionFinish() {
@@ -170,33 +175,21 @@ public class Wand : MonoBehaviour {
   }
 
   public void OnActionCancel() {
-    cam.SetMenuMode(true);
     onUnitAction = false;
     onUnitActions = true;
-
-    // Move wand
-    Vector2Int pos = battle.currentUnit.position;
-    transform.position = new Vector3(pos.x, 0, pos.y);
-
-    // Delete tiles
-    foreach (Transform tile in tileTransform)
-      Destroy(tile.gameObject);
+    cam.SetMenuMode(true);
+    ResetWandToUnit();
+    ClearTargetTiles();
   }
 
   public void OnMove() {
-    cam.SetMenuMode(false);
     onUnitMove = true;
     onUnitCommands = false;
-
-    // Move tiles
-    targetTiles = battle.GetMoveTiles(battle.currentUnit);
-
-    foreach (TileNode tile in targetTiles)
-      Instantiate(tilePrefab, tile.GetPos(), Quaternion.identity, tileTransform);
+    cam.SetMenuMode(false);
+    SetTargetTiles(battle.GetMoveTiles(battle.currentUnit));
   }
 
   public void OnMoveConfirm() {
-    cam.SetMenuMode(true);
     whileUnitMove = true;
     onUnitMove = false;
 
@@ -205,9 +198,8 @@ public class Wand : MonoBehaviour {
     List<TileNode> path = battle.GetMovePath(battle.currentUnit, end);
     battle.MoveUnit(battle.currentUnit, path);
 
-    // Delete tiles
-    foreach (Transform tile in tileTransform)
-      Destroy(tile.gameObject);
+    cam.SetMenuMode(true);
+    ClearTargetTiles();
   }
 
   public void OnMoveFinish() {
@@ -216,17 +208,11 @@ public class Wand : MonoBehaviour {
   }
 
   public void OnMoveCancel() {
-    cam.SetMenuMode(true);
     onUnitMove = false;
     onUnitCommands = true;
-
-    // Move wand
-    Vector2Int pos = battle.currentUnit.position;
-    transform.position = new Vector3(pos.x, 0, pos.y);
-
-    // Delete tiles
-    foreach (Transform tile in tileTransform)
-      Destroy(tile.gameObject);
+    cam.SetMenuMode(true);
+    ResetWandToUnit();
+    ClearTargetTiles();
   }
 
   public void KeyInputs() {
