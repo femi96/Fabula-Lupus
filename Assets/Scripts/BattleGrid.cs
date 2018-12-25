@@ -340,39 +340,11 @@ public class BattleGrid : MonoBehaviour {
     // Return set
     HashSet<TileNode> visited = new HashSet<TileNode>();
 
-    // Initial collection values
-    List<TileNode> queue = new List<TileNode>();
-    Dictionary<TileNode, TileNode> previous = new Dictionary<TileNode, TileNode>();
-    Dictionary<TileNode, float> distances = new Dictionary<TileNode, float>();
+    Vector3 centerPos = center.GetPos();
 
     foreach (TileNode node in tileDict.Values) {
-      distances.Add(node, float.MaxValue);
-    }
-
-    distances[center] = 0f;
-    queue.Add(center);
-
-    // Start search
-    while (queue.Count != 0) {
-      queue = queue.OrderBy(node => distances[node]).ToList();
-      TileNode current = queue[0];
-      queue.RemoveAt(0);
-      visited.Add(current);
-
-      float baseDist = distances[current];
-
-      foreach (TileEdge edge in current.edges) {
-        float edgeDist = baseDist + edge.GetWeight();
-        TileNode node = edge.GetNode();
-
-        if (edgeDist <= range && edgeDist <= distances[node]) {
-          if (!previous.ContainsKey(node))
-            queue.Add(node);
-
-          previous[node] = current;
-          distances[node] = edgeDist;
-        }
-      }
+      if ((node.GetPos() - centerPos).magnitude <= range)
+        visited.Add(node);
     }
 
     if (!selfTarget)
