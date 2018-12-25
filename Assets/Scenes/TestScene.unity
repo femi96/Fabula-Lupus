@@ -1761,6 +1761,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 1214699762015552, guid: da15f66f234fc4940a512604ac187c76, type: 2}
   isMovingUnit: 0
+  isActingUnit: 0
+  isControllingUnit: 0
   xMin: 0
   xMax: 0
   zMin: 0
