@@ -61,7 +61,7 @@ public class Unit {
     type.Add(UnitType.Normal);
 
     actions = new List<Action>();
-    actions.Add(new TestAction());
+    actions.Add(new Slap());
     actions.Add(new TestAction());
     actions.Add(new TestAction());
     actions.Add(new TestAction());

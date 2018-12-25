@@ -19,4 +19,8 @@ public abstract class Action {
   }
 
   public abstract void ApplyAction(List<TileNode> targets, BattleGrid battle);
+
+  public override string ToString() {
+    return GetName();
+  }
 }
