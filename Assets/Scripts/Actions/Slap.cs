@@ -14,7 +14,7 @@ public class Slap : Action {
 
   public override HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle) {
     TileNode center = battle.GetTile(user.position);
-    return battle.GetRangeTiles(center, 1.25f);
+    return battle.GetRangeTiles(center, 1.0f);
   }
 
   public override void ApplyAction(List<TileNode> targets, BattleGrid battle) {

@@ -331,19 +331,26 @@ public class BattleGrid : MonoBehaviour {
   }
 
   public HashSet<TileNode> GetRangeTiles(TileNode center, float range) {
-    return GetRangeTiles(center, range, false);
+    return GetRangeTiles(center, range, false, true);
   }
 
-  public HashSet<TileNode> GetRangeTiles(TileNode center, float range, bool selfTarget) {
+  public HashSet<TileNode> GetRangeTiles(TileNode center, float range, bool selfTarget, bool ignoreHeight) {
     // Use Dijkstra's alg to get tiles in range
 
     // Return set
     HashSet<TileNode> visited = new HashSet<TileNode>();
+    range += 0.01f;
 
     Vector3 centerPos = center.GetPos();
+    Vector3 delta;
 
     foreach (TileNode node in tileDict.Values) {
-      if ((node.GetPos() - centerPos).magnitude <= range)
+      delta = node.GetPos() - centerPos;
+
+      if (ignoreHeight)
+        delta = delta - delta.y * Vector3.up;
+
+      if (delta.magnitude <= range)
         visited.Add(node);
     }
 
