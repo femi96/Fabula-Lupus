@@ -11,7 +11,6 @@ public class Wand : MonoBehaviour {
   // Object refs
   private BattleGrid battle;
   public WandCamera cam;
-  public Transform shape;
 
   void Start() {
     StartUI();
