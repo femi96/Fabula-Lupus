@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4255202573166600}
   - component: {fileID: 114679179962646102}
+  - component: {fileID: 114512158678881036}
   m_Layer: 0
   m_Name: Wand
   m_TagString: Untagged
@@ -188,6 +189,18 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1688068265446246}
   m_Enabled: 1
+--- !u!114 &114512158678881036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1534069561917474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9f22fa271373b4f861a24ffb4ab18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: {fileID: 4275856005533088}
 --- !u!114 &114626195445643248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,6 +234,8 @@ MonoBehaviour:
   whileUnitMove: 0
   onUnitActions: 0
   onUnitAction: 0
+  whileUnitAction: 0
+  whileAIControl: 0
   tilePrefab: {fileID: 1340462263065930, guid: ad08bc1178dd97b46bafde6c9c02b64f, type: 2}
   tileTransform: {fileID: 0}
   unitPanelL: {fileID: 0}
