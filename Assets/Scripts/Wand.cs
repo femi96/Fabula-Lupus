@@ -63,6 +63,7 @@ public class Wand : MonoBehaviour {
     } else {
       onUnitCommands = false;
       whileAIControl = true;
+      battle.isControllingUnit = true;
     }
 
     cam.SetMenuMode(true);
@@ -160,8 +161,8 @@ public class Wand : MonoBehaviour {
     onUnitAction = false;
     whileUnitAction = true;
 
-    battle.ActUnit(battle.currentUnit);
-    currentAction.ApplyAction(battle.GetTile(transform.position), battle);
+    TileNode target = battle.GetTile(transform.position);
+    battle.ActUnit(battle.currentUnit, currentAction, target);
 
     cam.SetMenuMode(true);
     ResetWandToUnit();

@@ -17,8 +17,4 @@ public class TestAction : Action {
     set.Add(battle.GetTile(user.position));
     return set;
   }
-
-  public override void ApplyAction(List<TileNode> targets, BattleGrid battle) {
-    return;
-  }
 }

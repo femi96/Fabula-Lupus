@@ -80,7 +80,17 @@ public class BattleGrid : MonoBehaviour {
     movingUnit.unit.apCur -= 1;
   }
 
-  public void ActUnit(BattleUnit unit) {
+  public void ActUnit(BattleUnit unit, Action action, TileNode target) {
+    List<TileNode> targets = new List<TileNode>();
+    targets.Add(target);
+    ActUnit(unit, action, targets);
+  }
+
+  public void ActUnit(BattleUnit unit, Action action, List<TileNode> targets) {
+    foreach (TileNode target in targets) {
+      action.ApplyAction(target, this);
+    }
+
     unit.unit.apCur -= 1;
   }
 
@@ -97,6 +107,36 @@ public class BattleGrid : MonoBehaviour {
 
       if (movingPath.Count == 0)
         isMovingUnit = false;
+    }
+
+    if (isControllingUnit) {
+      if (currentUnit.unit.apCur == 2) {
+        HashSet<TileNode> targets = GetMoveTiles(currentUnit);
+        TileNode end = targets.ToArray()[UnityEngine.Random.Range(0, targets.Count)];
+        List<TileNode> path = GetMovePath(currentUnit, end);
+        MoveUnit(currentUnit, path);
+      }
+
+      if (currentUnit.unit.apCur == 1 && !isMovingUnit) {
+        List<Action> actions = currentUnit.unit.actions;
+        Action action = actions[UnityEngine.Random.Range(0, actions.Count)];
+
+        HashSet<TileNode> targets = action.GetSelectionTiles(currentUnit, this);
+
+        if (action.GetActionType() == ActionType.Targeted) {
+          TileNode target = targets.ToArray()[UnityEngine.Random.Range(0, targets.Count)];
+          ActUnit(currentUnit, action, target);
+        }
+
+        if (action.GetActionType() == ActionType.Fixed) {
+          List<TileNode> target = new List<TileNode>(targets.ToArray());
+          ActUnit(currentUnit, action, target);
+        }
+      }
+
+      if (currentUnit.unit.apCur == 0 && !isActingUnit) {
+        isControllingUnit = false;
+      }
     }
   }
 
