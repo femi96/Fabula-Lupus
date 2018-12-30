@@ -22,7 +22,7 @@ public class Slap : Action {
       BattleUnit bu = battle.GetUnit(target.GetPos());
 
       if (bu != null)
-        bu.unit.ApplyDamage(10);
+        bu.unit.ApplyDamage(100);
     }
   }
 }
