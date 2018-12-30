@@ -160,6 +160,7 @@ public class Wand : MonoBehaviour {
     onUnitAction = false;
     whileUnitAction = true;
 
+    battle.ActUnit(battle.currentUnit);
     currentAction.ApplyAction(battle.GetTile(transform.position), battle);
 
     cam.SetMenuMode(true);

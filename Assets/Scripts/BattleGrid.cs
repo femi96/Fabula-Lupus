@@ -80,6 +80,10 @@ public class BattleGrid : MonoBehaviour {
     movingUnit.unit.apCur -= 1;
   }
 
+  public void ActUnit(BattleUnit unit) {
+    unit.unit.apCur -= 1;
+  }
+
   void Update() {
     if (isMovingUnit) {
       if (moveTime <= 0) {

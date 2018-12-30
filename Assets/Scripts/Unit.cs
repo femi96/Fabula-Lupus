@@ -69,6 +69,11 @@ public class Unit {
     passives = new List<Passive>();
   }
 
+  public void ApplyDamage(int damage) {
+    healthCur -= damage;
+    healthCur = Mathf.Max(healthCur, 0);
+  }
+
   public override string ToString() {
     return name + " " + gender + " Lvl." + level;
   }

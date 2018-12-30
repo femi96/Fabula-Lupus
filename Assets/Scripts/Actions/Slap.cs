@@ -18,6 +18,11 @@ public class Slap : Action {
   }
 
   public override void ApplyAction(List<TileNode> targets, BattleGrid battle) {
-    return;
+    foreach (TileNode target in targets) {
+      BattleUnit bu = battle.GetUnit(target.GetPos());
+
+      if (bu != null)
+        bu.unit.ApplyDamage(10);
+    }
   }
 }
