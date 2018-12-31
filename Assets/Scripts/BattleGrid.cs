@@ -66,7 +66,10 @@ public class BattleGrid : MonoBehaviour {
   public bool isMovingUnit = false;
   private BattleUnit movingUnit;
   private List<TileNode> movingPath;
-  private int moveTime = 0;
+  private float moveTime = 0f;
+
+  private TileNode moveSrc;
+  private TileNode moveDest;
 
   public bool isActingUnit = false;
 
@@ -76,7 +79,11 @@ public class BattleGrid : MonoBehaviour {
     isMovingUnit = true;
     movingUnit = unit;
     movingPath = path;
-    moveTime = 0;
+    moveTime = 1f;
+
+    moveSrc = path[0];
+    moveDest = moveSrc;
+    movingPath.RemoveAt(0);
     movingUnit.unit.apCur -= 1;
   }
 
@@ -96,17 +103,25 @@ public class BattleGrid : MonoBehaviour {
 
   void Update() {
     if (isMovingUnit) {
-      if (moveTime <= 0) {
-        TileNode current = movingPath[0];
-        movingPath.RemoveAt(0);
-        movingUnit.Move(current.GetPos(), Vector3ToKey(current.GetPos()));
-        moveTime = 20;
-      } else {
-        moveTime -= 1;
-      }
+      moveTime += Time.deltaTime;
 
-      if (movingPath.Count == 0)
-        isMovingUnit = false;
+      if (moveTime >= 1f) {
+        movingUnit.SetPos(moveDest.GetPos(), moveDest.GetKey());
+
+        if (movingPath.Count == 0) {
+          isMovingUnit = false;
+        } else {
+
+          moveSrc = moveDest;
+          moveDest = movingPath[0];
+          movingPath.RemoveAt(0);
+          moveTime = 0f;
+        }
+
+      } else {
+        Vector3 pos = moveSrc.GetPos() * (1 - moveTime) + moveDest.GetPos() * moveTime;
+        movingUnit.SetPos(pos, moveDest.GetKey());
+      }
     }
 
     if (isControllingUnit) {

@@ -20,8 +20,8 @@ public class BattleUnit {
     return unit.ToString();
   }
 
-  public void Move(Vector3 dest, Vector2Int pos) {
-    body.transform.position = dest;
-    position = pos;
+  public void SetPos(Vector3 pos, Vector2Int key) {
+    body.transform.position = pos;
+    position = key;
   }
 }
