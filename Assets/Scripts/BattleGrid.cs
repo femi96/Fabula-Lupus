@@ -23,7 +23,7 @@ public class BattleGrid : MonoBehaviour {
 
     foreach (KeyValuePair<Vector2Int, int> entry in spawnDict) {
       Unit unit = new Unit();
-      GameObject go = Instantiate(unitPrefab, tileDict[entry.Key].GetPos(), Quaternion.identity, transform);
+      GameObject go = Instantiate(unit.GetBody(), tileDict[entry.Key].GetPos(), Quaternion.identity, transform);
       units.Add(new BattleUnit(unit, entry.Key, entry.Value, go));
     }
   }

@@ -24,7 +24,10 @@ public class Unit {
   public List<Action> actions;
   public List<Passive> passives;
 
+  public GameObject body;
+
   public Unit() {
+    // Populate unit fields with default values
     name = "Boi " + Random.Range(1, 100).ToString();
     gender = Gender.N;
     cls = "Ravager";
@@ -62,11 +65,14 @@ public class Unit {
 
     actions = new List<Action>();
     actions.Add(new Slap());
-    actions.Add(new TestAction());
-    actions.Add(new TestAction());
-    actions.Add(new TestAction());
 
     passives = new List<Passive>();
+
+    body = (GameObject)Resources.Load("UnitBody", typeof(GameObject));
+  }
+
+  public GameObject GetBody() {
+    return body;
   }
 
   public void ApplyDamage(int damage) {
