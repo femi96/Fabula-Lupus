@@ -312,7 +312,7 @@ public class Wand : MonoBehaviour {
         uplAnim.Play("SlideOut", -1, animTime);
       }
 
-      if (uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
+      if (!(whileUnitMove || whileUnitAction) && uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
 
         targetUnit = newTargetUnit;
 
