@@ -21,6 +21,9 @@ public class Wand : MonoBehaviour {
     if (battle == null)
       battle = Object.FindObjectOfType<BattleGrid>();
 
+    if (whileUnitMove || whileUnitAction || whileAIControl)
+      ResetWandToUnit();
+
     if (whileUnitMove && !battle.isMovingUnit)
       OnMoveFinish();
 
@@ -75,8 +78,7 @@ public class Wand : MonoBehaviour {
   }
 
   private void ResetWandToUnit() {
-    Vector2Int pos = battle.currentUnit.position;
-    transform.position = new Vector3(pos.x, 0, pos.y);
+    transform.position = battle.currentUnit.position;
   }
 
   private void ClearTargetTiles() {
