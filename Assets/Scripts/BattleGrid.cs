@@ -252,7 +252,7 @@ public class BattleGrid : MonoBehaviour {
     Vector2Int k = Vector3ToKey(v);
 
     foreach (BattleUnit unit in units)
-      if (unit.key == k)
+      if (unit.GetPosKey() == k)
         return unit;
 
     return null;
@@ -287,8 +287,8 @@ public class BattleGrid : MonoBehaviour {
       distances.Add(node, float.MaxValue);
     }
 
-    distances[tileDict[bu.key]] = 0f;
-    queue.Add(tileDict[bu.key]);
+    distances[tileDict[bu.GetPosKey()]] = 0f;
+    queue.Add(tileDict[bu.GetPosKey()]);
 
     // Start search
     while (queue.Count != 0) {
@@ -321,7 +321,7 @@ public class BattleGrid : MonoBehaviour {
 
     // Remove units and return
     foreach (BattleUnit unit in units)
-      visited.Remove(tileDict[unit.key]);
+      visited.Remove(tileDict[unit.GetPosKey()]);
 
     return visited;
   }
@@ -340,8 +340,8 @@ public class BattleGrid : MonoBehaviour {
       distances.Add(node, float.MaxValue);
     }
 
-    distances[tileDict[bu.key]] = 0f;
-    queue.Add(tileDict[bu.key]);
+    distances[tileDict[bu.GetPosKey()]] = 0f;
+    queue.Add(tileDict[bu.GetPosKey()]);
 
     // Start search
     while (queue.Count != 0) {
@@ -377,7 +377,7 @@ public class BattleGrid : MonoBehaviour {
 
     // Remove initial and return
     List<TileNode> path = new List<TileNode>();
-    TileNode start = tileDict[bu.key];
+    TileNode start = tileDict[bu.GetPosKey()];
     TileNode prev = end;
 
     while (prev != start) {

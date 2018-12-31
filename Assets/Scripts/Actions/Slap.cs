@@ -13,7 +13,7 @@ public class Slap : Action {
   }
 
   public override HashSet<TileNode> GetSelectionTiles(BattleUnit user, BattleGrid battle) {
-    TileNode center = battle.GetTile(user.position);
+    TileNode center = battle.GetTile(user.GetPosKey());
     return battle.GetRangeTiles(center, 1.0f);
   }
 

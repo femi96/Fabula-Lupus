@@ -78,7 +78,7 @@ public class Wand : MonoBehaviour {
   }
 
   private void ResetWandToUnit() {
-    transform.position = battle.currentUnit.position;
+    transform.position = battle.currentUnit.GetPos();
   }
 
   private void ClearTargetTiles() {
