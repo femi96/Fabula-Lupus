@@ -30,7 +30,7 @@ public class Unit {
     // Populate unit fields with default values
     name = "Boi " + Random.Range(1, 100).ToString();
     gender = Gender.N;
-    cls = "Ravager";
+    cls = "RAVAGER";
 
     level = Random.Range(1, 11);
     exp = 0;
@@ -103,11 +103,11 @@ public class Unit {
       if (type.Count < i)
         screen.Find("Type/Type" + i.ToString()).gameObject.GetComponent<Text>().text = "";
       else
-        screen.Find("Type/Type" + i.ToString()).gameObject.GetComponent<Text>().text = type[i - 1].ToString();
+        screen.Find("Type/Type" + i.ToString()).gameObject.GetComponent<Text>().text = type[i - 1].ToString().ToUpper();
     }
 
     screen.Find("Level/LevelText").gameObject.GetComponent<Text>().text = level.ToString();
-    screen.Find("Exp/ExpText").gameObject.GetComponent<Text>().text = exp.ToString();
+    // screen.Find("Exp/ExpText").gameObject.GetComponent<Text>().text = exp.ToString();
     screen.Find("Health/HealthText").gameObject.GetComponent<Text>().text = healthCur.ToString() + "/" + healthMax.ToString();
     screen.Find("Mana/ManaText").gameObject.GetComponent<Text>().text = manaCur.ToString() + "/" + manaMax.ToString();
 

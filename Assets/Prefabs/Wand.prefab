@@ -225,7 +225,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 114626195445643248}
-  shape: {fileID: 4275856005533088}
   onUnitCommands: 0
   onUnitWait: 0
   onUnitLook: 0
