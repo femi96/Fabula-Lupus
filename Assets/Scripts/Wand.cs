@@ -336,13 +336,13 @@ public class Wand : MonoBehaviour {
       unitCommandsMenu.transform.Find("BackImage/MoveButton").gameObject.GetComponent<Button>().interactable = targetUnit.unit.apCur > 0;
       unitCommandsMenu.transform.Find("BackImage/ActButton").gameObject.GetComponent<Button>().interactable = targetUnit.unit.apCur > 0;
       unitCommandsMenu.transform.Find("BackImage/APImage/Text").gameObject.GetComponent<Text>().text = targetUnit.unit.apCur.ToString();
-      Color apColor = new Color(24f / 256, 115f / 256, 20f / 256);
+      Color apColor = new Color(1f, 1f, 1f);
 
       if (targetUnit.unit.apCur == 1)
-        apColor = new Color(0.75f, 0.75f, 0.25f);
+        apColor = new Color(1f, 196f / 256f, 0f);
 
       if (targetUnit.unit.apCur == 0)
-        apColor = new Color(0.75f, 0.15f, 0.15f);
+        apColor = new Color(0.5f, 0.15f, 0.15f);
 
       unitCommandsMenu.transform.Find("BackImage/APImage/Text").gameObject.GetComponent<Text>().color = apColor;
 
