@@ -58,6 +58,9 @@ public class BattleGrid : MonoBehaviour {
     currentUnit = unitQueue[0];
     currentUnit.unit.apCur = currentUnit.unit.apMax;
     unitQueue.RemoveAt(0);
+
+    if (!currentUnit.unit.IsAlive())
+      NextCurrentUnit();
   }
 
   private void UpdateUnitQueue() {
