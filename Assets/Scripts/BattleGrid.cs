@@ -28,6 +28,29 @@ public class BattleGrid : MonoBehaviour {
     }
   }
 
+  public int GetEndState() {
+    bool alliesAlive = false;
+    bool enemiesAlive = false;
+
+    foreach (BattleUnit bu in units) {
+      if (bu.unit.IsAlive()) {
+        if (bu.team == 0)
+          alliesAlive = true;
+
+        if (bu.team == 1)
+          enemiesAlive = true;
+      }
+    }
+
+    if (!alliesAlive)
+      return 1;
+
+    if (!enemiesAlive)
+      return 0;
+
+    return -1; // Ongoing
+  }
+
   public void NextCurrentUnit() {
     if (unitQueue == null || unitQueue.Count == 0)
       UpdateUnitQueue();

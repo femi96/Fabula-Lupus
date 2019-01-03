@@ -155,7 +155,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 8c07ef4e3acbf9a4d97c74b2f085b16e, type: 2}
+  - {fileID: 2100000, guid: f3897604a43e4f341a4081f99817c573, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -235,6 +235,8 @@ MonoBehaviour:
   onUnitAction: 0
   whileUnitAction: 0
   whileAIControl: 0
+  onEndWin: 0
+  onEndLose: 0
   tilePrefab: {fileID: 1340462263065930, guid: ad08bc1178dd97b46bafde6c9c02b64f, type: 2}
   tileTransform: {fileID: 0}
   unitPanelL: {fileID: 0}
@@ -249,3 +251,5 @@ MonoBehaviour:
     type: 2}
   unitActionsContent: {fileID: 0}
   unitActionKey: {fileID: 0}
+  endScreenWin: {fileID: 0}
+  endScreenLose: {fileID: 0}

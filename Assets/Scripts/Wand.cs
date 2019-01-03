@@ -51,6 +51,9 @@ public class Wand : MonoBehaviour {
   public bool whileUnitAction = false;
   public bool whileAIControl = false;
 
+  public bool onEndWin = false;
+  public bool onEndLose = false;
+
   private HashSet<TileNode> targetTiles;
   public GameObject tilePrefab;
   public Transform tileTransform;
@@ -58,6 +61,16 @@ public class Wand : MonoBehaviour {
   private Action currentAction;
 
   private void PassUnit() {
+
+    // End game if end condition met
+    int endState = battle.GetEndState();
+
+    if (endState != -1) {
+      OnEndBattle(endState);
+      return;
+    }
+
+    // Go to Next Unit
     battle.NextCurrentUnit();
 
     if (battle.currentUnit.team == 0) {
@@ -71,6 +84,17 @@ public class Wand : MonoBehaviour {
 
     cam.SetMenuMode(true);
     ResetWandToUnit();
+  }
+
+  public void OnEndBattle(int state) {
+    onUnitCommands = false;
+    whileAIControl = false;
+
+    if (state == 0)
+      onEndWin = true;
+
+    if (state == 1)
+      onEndLose = true;
   }
 
   public bool CanMoveWand() {
@@ -280,6 +304,10 @@ public class Wand : MonoBehaviour {
 
   public GameObject unitActionKey;
 
+  [Header("UI: End Screens")]
+  public GameObject endScreenWin;
+  public GameObject endScreenLose;
+
   private void StartUI() {
     unitPanelL.GetComponent<Animator>().Play("SlideOut", -1, 1f);
     unitCommandsMenu.GetComponent<Animator>().Play("SlideOut", -1, 1f);
@@ -452,5 +480,9 @@ public class Wand : MonoBehaviour {
 
       uaAnim.Play("SlideIn");
     }
+
+    // UI: End Screen
+    endScreenWin.SetActive(onEndWin);
+    endScreenLose.SetActive(onEndLose);
   }
 }

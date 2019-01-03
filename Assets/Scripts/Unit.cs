@@ -80,6 +80,10 @@ public class Unit {
     healthCur = Mathf.Max(healthCur, 0);
   }
 
+  public bool IsAlive() {
+    return healthCur > 0;
+  }
+
   public override string ToString() {
     return name + " " + gender + " Lvl." + level;
   }
