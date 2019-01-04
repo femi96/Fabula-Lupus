@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum ActionType {Targeted, Fixed}
 
+[System.Serializable]
 public abstract class Action {
 
   public abstract string GetName();

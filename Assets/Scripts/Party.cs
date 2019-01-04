@@ -11,10 +11,10 @@ public class Party : MonoBehaviour {
   void Start() {
     bool loadSuccess = LoadParty(0);
 
-    if (!loadSuccess)
+    if (!loadSuccess) {
       GenerateParty(0);
-
-    SaveParty();
+      SaveParty();
+    }
   }
 
   void Update() {}
@@ -109,6 +109,7 @@ public class Party : MonoBehaviour {
     // Unload BattleGrid Scene
 
     // End of battle changes to macro game
+    SaveParty();
   }
 
   // Party controls world menus

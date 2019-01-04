@@ -7,6 +7,7 @@ public enum Gender { N, K, S, X, M, F };
 public enum Stat { Con, Str, Agi, Rea, Mnd, Int, Wil, Cha };
 public enum UnitType { Normal, Grass };
 
+[System.Serializable]
 public class Unit {
 
   public string name;
@@ -24,7 +25,7 @@ public class Unit {
   public List<Action> actions;
   public List<Passive> passives;
 
-  public GameObject body;
+  public string bodyResource;
 
   public Unit() {
     // Populate unit fields with default values
@@ -68,11 +69,11 @@ public class Unit {
 
     passives = new List<Passive>();
 
-    body = (GameObject)Resources.Load("UnitBody", typeof(GameObject));
+    bodyResource = "UnitBody";
   }
 
   public GameObject GetBody() {
-    return body;
+    return (GameObject)Resources.Load(bodyResource, typeof(GameObject));;
   }
 
   public void ApplyDamage(int damage) {
