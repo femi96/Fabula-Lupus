@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +13,15 @@ public class Unit {
 
   public string name;
   public Gender gender;
-  public string cls;
 
-  public int level, exp;
-  public Dictionary<Stat, int> stats;
+  public UnitRace race;
+  public List<UnitClass> classes;
+
   public List<UnitType> type;
+  public Dictionary<Stat, int> stats;
+  public Dictionary<Stat, int> statsUnique;
+  public int level;
+
   public float move;
   public float jump;
   public int healthCur, healthMax, manaCur, manaMax, speedCur, speedMax, speedTemp;
@@ -29,33 +34,32 @@ public class Unit {
 
   public Unit() {
     // Populate unit fields with default values
-    name = "Boi " + Random.Range(1, 100).ToString();
+    name = "Boi " + UnityEngine.Random.Range(1, 100).ToString();
     gender = Gender.N;
-    cls = "RAVAGER";
+    race = new Hume();
+    classes = new List<UnitClass>();
+    classes.Add(new Knight());
 
-    level = Random.Range(1, 11);
-    exp = 0;
+    statsUnique = new Dictionary<Stat, int>();
 
-    stats = new Dictionary<Stat, int>();
-    stats.Add(Stat.Con, Random.Range(1, 11));
-    stats.Add(Stat.Str, Random.Range(1, 11));
-    stats.Add(Stat.Agi, Random.Range(1, 11));
-    stats.Add(Stat.Rea, Random.Range(1, 11));
-    stats.Add(Stat.Mnd, Random.Range(1, 11));
-    stats.Add(Stat.Int, Random.Range(1, 11));
-    stats.Add(Stat.Wil, Random.Range(1, 11));
-    stats.Add(Stat.Cha, Random.Range(1, 11));
+    bodyResource = "UnitBody";
 
-    move = 2f;
-    jump = 0.5f;
+    UpdateDerivedStats();
+    ResetCurrentStats();
+  }
+
+  public void UpdateDerivedStats() {
+    race.SetBaseStats(this);
+
+    foreach (KeyValuePair<Stat, int> stat in statsUnique) {
+      stats[stat.Key] += stat.Value;
+    }
+
+    level = 0;
 
     healthMax = 14 + stats[Stat.Con] * 5 + stats[Stat.Str] + stats[Stat.Agi] / 2;
-    healthCur = healthMax;
     manaMax = 5 + stats[Stat.Wil] * 5 + stats[Stat.Mnd] + stats[Stat.Int] / 3;
-    manaCur = manaMax;
     speedMax = stats[Stat.Rea] + stats[Stat.Int];
-    speedCur = speedMax;
-    speedTemp = speedCur;
 
     apMax = 2;
     apCur = apMax;
@@ -68,8 +72,13 @@ public class Unit {
     actions.Add(new Slap());
 
     passives = new List<Passive>();
+  }
 
-    bodyResource = "UnitBody";
+  public void ResetCurrentStats() {
+    healthCur = healthMax;
+    manaCur = manaMax;
+    speedCur = speedMax;
+    speedTemp = 0;
   }
 
   public GameObject GetBody() {
@@ -101,7 +110,7 @@ public class Unit {
   public void SetStatusUI(GameObject statusUI) {
     Transform screen = statusUI.transform.Find("BackImage");
     screen.Find("NameText").gameObject.GetComponent<Text>().text = name;
-    screen.Find("ClassText").gameObject.GetComponent<Text>().text = cls;
+    screen.Find("ClassText").gameObject.GetComponent<Text>().text = classes[0].ToString();
     screen.Find("GenderText").gameObject.GetComponent<Text>().text = gender.ToString();
 
     for (int i = 1; i <= 3; i++) {
@@ -112,7 +121,6 @@ public class Unit {
     }
 
     screen.Find("Level/LevelText").gameObject.GetComponent<Text>().text = level.ToString();
-    // screen.Find("Exp/ExpText").gameObject.GetComponent<Text>().text = exp.ToString();
     screen.Find("Health/HealthText").gameObject.GetComponent<Text>().text = healthCur.ToString() + "/" + healthMax.ToString();
     screen.Find("Mana/ManaText").gameObject.GetComponent<Text>().text = manaCur.ToString() + "/" + manaMax.ToString();
 
