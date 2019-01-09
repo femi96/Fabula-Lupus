@@ -26,6 +26,7 @@ public class Keaton : UnitGenerator {
     unit.statsUnique = statsUnique;
 
     unit.bodyResource = "KeatBody";
+    unit.profileResource = "KeatProfile";
 
     unit.UpdateDerivedStats();
     unit.ResetCurrentStats();
