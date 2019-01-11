@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public class Party : MonoBehaviour {
 
   void Start() {
-    bool loadSuccess = LoadParty(0);
+    // bool loadSuccess = LoadParty(0);
+    bool loadSuccess = false;
 
     if (!loadSuccess) {
       GenerateParty(0);
@@ -27,7 +28,7 @@ public class Party : MonoBehaviour {
   private void GenerateParty(int ID) {
     partyID = 0;
     partyUnits = new List<Unit>();
-    partyUnits.Add(new Unit());
+    partyUnits.Add((new Keaton()).NewUnit());
   }
 
   // Get file path for party from its ID

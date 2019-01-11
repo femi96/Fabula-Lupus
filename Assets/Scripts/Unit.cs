@@ -31,6 +31,7 @@ public class Unit {
   public List<Passive> passives;
 
   public string bodyResource;
+  public string profileResource;
 
   public Unit() {
     // Populate unit fields with default values
@@ -38,11 +39,12 @@ public class Unit {
     gender = Gender.N;
     race = new Hume();
     classes = new List<UnitClass>();
-    classes.Add(new Knight());
+    classes.Add(new Dweller());
 
     statsUnique = new Dictionary<Stat, int>();
 
     bodyResource = "UnitBody";
+    profileResource = "";
 
     UpdateDerivedStats();
     ResetCurrentStats();
@@ -82,7 +84,7 @@ public class Unit {
   }
 
   public GameObject GetBody() {
-    return (GameObject)Resources.Load(bodyResource, typeof(GameObject));;
+    return (GameObject)Resources.Load(bodyResource, typeof(GameObject));
   }
 
   public void ApplyDamage(int damage) {
@@ -105,6 +107,16 @@ public class Unit {
     panel.Find("Level/LevelText").gameObject.GetComponent<Text>().text = level.ToString();
     panel.Find("Health/HealthText").gameObject.GetComponent<Text>().text = healthCur.ToString() + "/" + healthMax.ToString();
     panel.Find("Mana/ManaText").gameObject.GetComponent<Text>().text = manaCur.ToString() + "/" + manaMax.ToString();
+
+    GameObject profileImage = panel.GetChild(2).gameObject;
+    GameObject profileImageDefault = panel.GetChild(1).gameObject;
+
+    profileImageDefault.SetActive(profileResource == "");
+    profileImage.SetActive(profileResource != "");
+
+    if (profileResource != "") {
+      profileImage.GetComponent<Image>().sprite = (Sprite)Resources.Load(profileResource, typeof(Sprite));
+    }
   }
 
   public void SetStatusUI(GameObject statusUI) {
@@ -112,6 +124,9 @@ public class Unit {
     screen.Find("NameText").gameObject.GetComponent<Text>().text = name;
     screen.Find("ClassText").gameObject.GetComponent<Text>().text = classes[0].ToString();
     screen.Find("GenderText").gameObject.GetComponent<Text>().text = gender.ToString();
+
+    if (profileResource != "")
+      screen.Find("ProfileImage").gameObject.GetComponent<Image>().sprite = (Sprite)Resources.Load(profileResource, typeof(Sprite));
 
     for (int i = 1; i <= 3; i++) {
       if (type.Count < i)

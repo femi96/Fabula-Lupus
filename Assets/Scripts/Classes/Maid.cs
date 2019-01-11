@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Knight : UnitClass {
+public class Maid : UnitClass {
 
   public override Dictionary<int, UnitClassBonus> GetBonuses() {
     return new Dictionary<int, UnitClassBonus>() {
