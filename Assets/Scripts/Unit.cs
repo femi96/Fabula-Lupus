@@ -59,6 +59,11 @@ public class Unit {
 
     level = 0;
 
+    foreach (UnitClass c in classes) {
+      level += c.level;
+      c.ApplyBonusToUnit(this);
+    }
+
     healthMax = 14 + stats[Stat.Con] * 5 + stats[Stat.Str] + stats[Stat.Agi] / 2;
     manaMax = 5 + stats[Stat.Wil] * 5 + stats[Stat.Mnd] + stats[Stat.Int] / 3;
     speedMax = stats[Stat.Rea] + stats[Stat.Int];

@@ -22,9 +22,15 @@ public abstract class UnitClass {
     exp += expDelta;
 
     // Level up
-    if (exp >= GetMaxExp()) {
+    while (exp >= GetMaxExp()) {
+
+      if (level == 10) {
+        exp = 0;
+        return;
+      }
+
+      exp -= GetMaxExp();
       level += 1;
-      exp = exp % GetMaxExp();
     }
   }
 

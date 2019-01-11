@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UnitClassBonus {
 
   private bool isStat = false, isAction = false, isPassive = false;

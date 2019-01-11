@@ -12,6 +12,7 @@ public class Keaton : UnitGenerator {
     unit.race = new Hume();
     unit.classes = new List<UnitClass>();
     unit.classes.Add(new Knight());
+    unit.classes[0].AddExp(10000);
 
     Dictionary<Stat, int> statsUnique = new Dictionary<Stat, int>();
     statsUnique.Add(Stat.Con, 1);
