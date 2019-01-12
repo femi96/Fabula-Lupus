@@ -133,11 +133,12 @@ public class BattleGrid : MonoBehaviour {
 
   void Update() {
     if (isMovingUnit) {
-      moveTime += Time.deltaTime * 0.75f;
+      moveTime += Time.deltaTime * 0.6f;
 
       if (moveTime >= 1f) {
         movingUnit.body.transform.position = moveDest.GetPos();
         movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation();
+        movingUnit.body.transform.GetChild(0).localPosition = 0.8f * Vector3.up;
         movingUnit.SetPosKey(moveDest.GetKey());
 
         if (movingPath.Count == 0) {
@@ -160,16 +161,16 @@ public class BattleGrid : MonoBehaviour {
 
         Vector3 moveDir = (moveDest.GetPos() - moveSrc.GetPos()).normalized;
 
-        float stepSize = 1f / 8f;
+        float stepSize = 1f / 4f;
 
         float stepTime = Mathf.FloorToInt(moveTime / stepSize) * stepSize;
+        // stepTime = moveTime;
         float rotAngle = stepTime * 360;
         Vector3 rotVec = Vector3.Cross(Vector3.up, Vector3.forward);
         Vector3 pos = moveSrc.GetPos() * (1 - stepTime) + moveDest.GetPos() * stepTime;
-        pos -= Mathf.Abs(Mathf.Sin(rotAngle * Mathf.Deg2Rad)) * 0.6f * Vector3.up;
         movingUnit.body.transform.position = pos;
-        // movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation();
         movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation() * Quaternion.AngleAxis(rotAngle, rotVec);
+        movingUnit.body.transform.GetChild(0).localPosition = (Mathf.Abs(Mathf.Cos(rotAngle * Mathf.Deg2Rad)) * 0.4f + 0.4f) * Vector3.up;
 
         // movingUnit.SetPosKey(moveDest.GetKey());
       }
