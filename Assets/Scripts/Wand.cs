@@ -38,7 +38,9 @@ public class Wand : MonoBehaviour {
   }
 
   /* Game State */
+  private BattleUnit hoverUnit;
   private BattleUnit targetUnit;
+  private TileNode targetTile;
 
   public bool onUnitCommands = false;
   public bool onUnitWait = false;
@@ -80,6 +82,7 @@ public class Wand : MonoBehaviour {
       onUnitCommands = false;
       whileAIControl = true;
       battle.isControllingUnit = true;
+      battle.controlTime = 0;
     }
 
     cam.SetMenuMode(true);
@@ -323,31 +326,40 @@ public class Wand : MonoBehaviour {
   private void UpdateUI() {
 
     // Update targetUnit and targetTile
-    BattleUnit newTargetUnit = battle.GetUnit(transform.position);
-    TileNode targetTile = battle.GetTile(transform.position);
+    hoverUnit = battle.GetUnit(transform.position);
+    targetTile = battle.GetTile(transform.position);
 
     // Update UI for targetUnit
 
     // UI: Unit Panel L
-    if (newTargetUnit != targetUnit || onStatusScreen) {
+    Animator uplAnim = unitPanelL.GetComponent<Animator>();
+    AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
 
-      Animator uplAnim = unitPanelL.GetComponent<Animator>();
-      AnimatorStateInfo uplAnimState = uplAnim.GetCurrentAnimatorStateInfo(0);
-
+    // Update targetUnit
+    if (hoverUnit != targetUnit) {
       if (uplAnimState.IsName("SlideIn")) {
-        targetUnit = null;
+        // targetUnit = null;
         float animTime = Mathf.Max(1f - uplAnimState.normalizedTime, 0f);
         uplAnim.Play("SlideOut", -1, animTime);
       }
 
-      if (!(whileUnitMove || whileUnitAction) && uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
+      if (uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
+        targetUnit = hoverUnit;
+      }
+    }
 
-        targetUnit = newTargetUnit;
+    // When targetUnit is updated
+    if (hoverUnit == targetUnit) {
+      bool showPanel = targetUnit != null && battle.ShowPanel();
 
-        if (targetUnit != null) {
-          targetUnit.unit.SetPanelUI(unitPanelL);
-          uplAnim.Play("SlideIn");
-        }
+      if (showPanel && uplAnimState.IsName("SlideOut") && uplAnimState.normalizedTime > 1f) {
+        targetUnit.unit.SetPanelUI(unitPanelL);
+        uplAnim.Play("SlideIn");
+      }
+
+      if (!showPanel && uplAnimState.IsName("SlideIn") && uplAnimState.normalizedTime > 1f) {
+        targetUnit.unit.SetPanelUI(unitPanelL);
+        uplAnim.Play("SlideOut");
       }
     }
 
@@ -454,7 +466,7 @@ public class Wand : MonoBehaviour {
     }
 
     if (onStatusScreen && usAnimState.IsName("SlideOut") && usAnimState.normalizedTime > 1f) {
-      newTargetUnit.unit.SetStatusUI(unitStatus);
+      hoverUnit.unit.SetStatusUI(unitStatus);
       usAnim.Play("SlideIn");
     }
 

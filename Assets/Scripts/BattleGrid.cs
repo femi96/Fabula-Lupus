@@ -104,6 +104,7 @@ public class BattleGrid : MonoBehaviour {
   public bool isActingUnit = false;
 
   public bool isControllingUnit = false;
+  public float controlTime = 0f;
 
   public void MoveUnit(BattleUnit unit, List<TileNode> path) {
     isMovingUnit = true;
@@ -131,9 +132,13 @@ public class BattleGrid : MonoBehaviour {
     unit.unit.apCur -= 1;
   }
 
+  public bool ShowPanel() {
+    return !(isMovingUnit || isActingUnit);
+  }
+
   void Update() {
     if (isMovingUnit) {
-      moveTime += Time.deltaTime * 0.6f;
+      moveTime += Time.deltaTime * 2.6f;
 
       if (moveTime >= 1f) {
         movingUnit.body.transform.position = moveDest.GetPos();
@@ -177,14 +182,17 @@ public class BattleGrid : MonoBehaviour {
     }
 
     if (isControllingUnit) {
-      if (currentUnit.unit.apCur == 2) {
+      controlTime += Time.deltaTime;
+
+      if (currentUnit.unit.apCur == 2 && controlTime >= 1f) {
         HashSet<TileNode> targets = GetMoveTiles(currentUnit);
         TileNode end = targets.ToArray()[UnityEngine.Random.Range(0, targets.Count)];
         List<TileNode> path = GetMovePath(currentUnit, end);
         MoveUnit(currentUnit, path);
+        controlTime -= 1f;
       }
 
-      if (currentUnit.unit.apCur == 1 && !isMovingUnit) {
+      if (currentUnit.unit.apCur == 1 && !isMovingUnit && controlTime >= 1f) {
         List<Action> actions = currentUnit.unit.actions;
         Action action = actions[UnityEngine.Random.Range(0, actions.Count)];
 
@@ -199,10 +207,13 @@ public class BattleGrid : MonoBehaviour {
           List<TileNode> target = new List<TileNode>(targets.ToArray());
           ActUnit(currentUnit, action, target);
         }
+
+        controlTime -= 1f;
       }
 
-      if (currentUnit.unit.apCur == 0 && !isActingUnit) {
+      if (currentUnit.unit.apCur == 0 && !isActingUnit && controlTime >= 1f) {
         isControllingUnit = false;
+        controlTime -= 1f;
       }
     }
   }
