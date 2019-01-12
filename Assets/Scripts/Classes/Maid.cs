@@ -10,4 +10,8 @@ public class Maid : UnitClass {
       { 1, new UnitClassBonus(Stat.Con, 1) },
     };
   }
+
+  public override string GetName() {
+    return "Maid";
+  }
 }

@@ -12,4 +12,8 @@ public class Knight : UnitClass {
       { 10, new UnitClassBonus(Stat.Wil, 11) },
     };
   }
+
+  public override string GetName() {
+    return "Knight";
+  }
 }

@@ -57,4 +57,13 @@ public abstract class UnitClass {
   public void SetClassUI() {
     // None for now
   }
+
+  public override string ToString() {
+    if (level == 10)
+      return GetName() + ".X";
+
+    return GetName() + "." + level;
+  }
+
+  public abstract string GetName();
 }
