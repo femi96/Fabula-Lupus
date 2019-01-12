@@ -17,7 +17,7 @@ public class Hume : UnitRace {
     stats.Add(Stat.Cha, 3);
 
     unit.stats = stats;
-    unit.move = 2f;
+    unit.move = 4f;
     unit.jump = 0.5f;
   }
 }

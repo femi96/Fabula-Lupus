@@ -133,10 +133,12 @@ public class BattleGrid : MonoBehaviour {
 
   void Update() {
     if (isMovingUnit) {
-      moveTime += Time.deltaTime;
+      moveTime += Time.deltaTime * 0.75f;
 
       if (moveTime >= 1f) {
-        movingUnit.SetPos(moveDest.GetPos(), moveDest.GetKey());
+        movingUnit.body.transform.position = moveDest.GetPos();
+        movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation();
+        movingUnit.SetPosKey(moveDest.GetKey());
 
         if (movingPath.Count == 0) {
           isMovingUnit = false;
@@ -146,11 +148,30 @@ public class BattleGrid : MonoBehaviour {
           moveDest = movingPath[0];
           movingPath.RemoveAt(0);
           moveTime = 0f;
+
+          Vector3 moveDir = (moveDest.GetPos() - moveSrc.GetPos()).normalized;
+          Vector2Int faceDir = new Vector2Int(Mathf.RoundToInt(moveDir.x), Mathf.RoundToInt(moveDir.z));
+          movingUnit.SetFaceDirection(faceDir);
         }
 
       } else {
-        Vector3 pos = moveSrc.GetPos() * (1 - moveTime) + moveDest.GetPos() * moveTime;
-        movingUnit.SetPos(pos, moveDest.GetKey());
+        // Vector3 pos = moveSrc.GetPos() * (1 - moveTime) + moveDest.GetPos() * moveTime;
+        // movingUnit.body.transform.position = pos;
+
+        Vector3 moveDir = (moveDest.GetPos() - moveSrc.GetPos()).normalized;
+
+        float stepSize = 1f / 8f;
+
+        float stepTime = Mathf.FloorToInt(moveTime / stepSize) * stepSize;
+        float rotAngle = stepTime * 360;
+        Vector3 rotVec = Vector3.Cross(Vector3.up, Vector3.forward);
+        Vector3 pos = moveSrc.GetPos() * (1 - stepTime) + moveDest.GetPos() * stepTime;
+        pos -= Mathf.Abs(Mathf.Sin(rotAngle * Mathf.Deg2Rad)) * 0.6f * Vector3.up;
+        movingUnit.body.transform.position = pos;
+        // movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation();
+        movingUnit.body.transform.GetChild(0).rotation = movingUnit.GetFaceRotation() * Quaternion.AngleAxis(rotAngle, rotVec);
+
+        // movingUnit.SetPosKey(moveDest.GetKey());
       }
     }
 
