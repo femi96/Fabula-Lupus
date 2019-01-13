@@ -51,12 +51,21 @@ public class Unit {
   }
 
   public void UpdateDerivedStats() {
-    race.SetUnit(this);
+    // Setup collections
+    type = new List<UnitType>();
+    actions = new List<Action>();
+    passives = new List<Passive>();
+    stats = new Dictionary<Stat, int>();
 
-    foreach (KeyValuePair<Stat, int> stat in statsUnique) {
+    // Initialize stats
+    foreach (Stat stat in(Stat[]) Enum.GetValues(typeof(Stat)))
+      stats[stat] = 0;
+
+    // Set from individual, race, and classes
+    foreach (KeyValuePair<Stat, int> stat in statsUnique)
       stats[stat.Key] += stat.Value;
-    }
 
+    race.SetUnit(this);
     level = 0;
 
     foreach (UnitClass c in classes) {
@@ -64,17 +73,13 @@ public class Unit {
       c.ApplyBonusToUnit(this);
     }
 
+    // Derive stats
     healthMax = 14 + stats[Stat.Con] * 5 + stats[Stat.Str] + stats[Stat.Agi] / 2;
     manaMax = 5 + stats[Stat.Wil] * 5 + stats[Stat.Mnd] + stats[Stat.Int] / 3;
     speedMax = stats[Stat.Rea] + stats[Stat.Int];
 
     apMax = 2;
     apCur = apMax;
-
-    actions = new List<Action>();
-    actions.Add(new Slap());
-
-    passives = new List<Passive>();
   }
 
   public void ResetCurrentStats() {
