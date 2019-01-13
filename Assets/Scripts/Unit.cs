@@ -51,7 +51,7 @@ public class Unit {
   }
 
   public void UpdateDerivedStats() {
-    race.SetBaseStats(this);
+    race.SetUnit(this);
 
     foreach (KeyValuePair<Stat, int> stat in statsUnique) {
       stats[stat.Key] += stat.Value;
@@ -70,10 +70,6 @@ public class Unit {
 
     apMax = 2;
     apCur = apMax;
-
-    type = new List<UnitType>();
-    type.Add(UnitType.Grass);
-    type.Add(UnitType.Normal);
 
     actions = new List<Action>();
     actions.Add(new Slap());

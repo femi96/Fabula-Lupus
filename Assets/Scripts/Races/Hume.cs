@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Hume : UnitRace {
 
-  public override void SetBaseStats(Unit unit) {
+  public override void SetUnit(Unit unit) {
     Dictionary<Stat, int> stats = new Dictionary<Stat, int>();
     stats.Add(Stat.Con, 3);
     stats.Add(Stat.Str, 3);
@@ -19,5 +19,8 @@ public class Hume : UnitRace {
     unit.stats = stats;
     unit.move = 8f;
     unit.jump = 0.5f;
+
+    unit.type = new List<UnitType>();
+    unit.type.Add(UnitType.Normal);
   }
 }

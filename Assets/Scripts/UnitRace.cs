@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public abstract class UnitRace {
 
-  public abstract void SetBaseStats(Unit unit);
+  public abstract void SetUnit(Unit unit);
 }
