@@ -2,34 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class UnitClassBonus {
 
+  private int level;
   private bool isStat = false, isAction = false, isPassive = false;
   private Stat stat;
   private int amount;
   private Action action;
   private Passive passive;
 
-  public UnitClassBonus() {}
-
-  public UnitClassBonus(Stat s, int a) {
+  public UnitClassBonus(int lvl, Stat s, int a) {
+    level = lvl;
     isStat = true;
     stat = s;
     amount = a;
   }
 
-  public UnitClassBonus(Action a) {
+  public UnitClassBonus(int lvl, Action a) {
+    level = lvl;
     isAction = true;
     action = a;
   }
 
-  public UnitClassBonus(Passive p) {
+  public UnitClassBonus(int lvl, Passive p) {
+    level = lvl;
     isPassive = true;
     passive = p;
   }
 
   public void ApplyToUnit(Unit unit) {
+
+    if (unit.level < level)
+      return;
+
     if (isStat)
       unit.stats[stat] += amount;
 

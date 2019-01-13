@@ -98,6 +98,11 @@ public class Unit {
     healthCur = Mathf.Max(healthCur, 0);
   }
 
+  public void ApplyHeal(int heal) {
+    healthCur += heal;
+    healthCur = Mathf.Min(healthCur, healthMax);
+  }
+
   public bool IsAlive() {
     return healthCur > 0;
   }

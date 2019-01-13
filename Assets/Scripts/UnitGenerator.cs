@@ -4,7 +4,5 @@ using UnityEngine;
 
 public abstract class UnitGenerator {
 
-  public virtual Unit NewUnit() {
-    return new Unit();
-  }
+  public abstract Unit NewUnit();
 }

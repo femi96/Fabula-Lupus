@@ -24,6 +24,9 @@ public class BattleGrid : MonoBehaviour {
     foreach (KeyValuePair<Vector2Int, int> entry in spawnDict) {
       Unit unit = new Unit();
 
+      if (entry.Value == 0)
+        unit = (new Snoo()).NewUnit();
+
       if (entry.Value == 1)
         unit = (new Keaton()).NewUnit();
 

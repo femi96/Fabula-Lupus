@@ -8,9 +8,7 @@ public abstract class UnitClass {
   public int level = 0;
   public int exp = 0;
 
-  public Dictionary<int, UnitClassBonus> bonusDict;
-
-  public abstract Dictionary<int, UnitClassBonus> GetBonuses();
+  public abstract List<UnitClassBonus> GetBonuses();
 
   public void AddExp(int expDelta) {
 
@@ -39,19 +37,11 @@ public abstract class UnitClass {
   }
 
   public void ApplyBonusToUnit(Unit unit) {
-    for (int i = 0; i <= level; i++) {
-      GetBonus(i).ApplyToUnit(unit);
+    List<UnitClassBonus> bonuses = GetBonuses();
+
+    foreach (UnitClassBonus bonus in bonuses) {
+      bonus.ApplyToUnit(unit);
     }
-  }
-
-  public UnitClassBonus GetBonus(int level) {
-    if (bonusDict == null)
-      bonusDict = GetBonuses();
-
-    if (bonusDict.ContainsKey(level))
-      return bonusDict[level];
-
-    return new UnitClassBonus();
   }
 
   public void SetClassUI() {
