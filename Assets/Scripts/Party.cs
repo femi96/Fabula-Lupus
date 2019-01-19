@@ -28,7 +28,7 @@ public class Party : MonoBehaviour {
   private void GenerateParty(int ID) {
     partyID = 0;
     partyUnits = new List<Unit>();
-    partyUnits.Add((new Keaton()).NewUnit());
+    partyUnits.Add(Keaton.NewUnit());
   }
 
   // Get file path for party from its ID

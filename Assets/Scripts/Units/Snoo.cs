@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Snoo : UnitGenerator {
+public static class Snoo {
 
-  public override Unit NewUnit() {
+  public static Unit NewUnit() {
     Unit unit = new Unit();
 
     unit.name = "Snoo";

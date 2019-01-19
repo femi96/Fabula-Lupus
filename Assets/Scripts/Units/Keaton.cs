@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Keaton : UnitGenerator {
+public static class Keaton {
 
-  public override Unit NewUnit() {
+  public static Unit NewUnit() {
     Unit unit = new Unit();
 
     unit.name = "Keaton";

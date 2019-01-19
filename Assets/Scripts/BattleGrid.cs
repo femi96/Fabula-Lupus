@@ -25,10 +25,10 @@ public class BattleGrid : MonoBehaviour {
       Unit unit = new Unit();
 
       if (entry.Value == 0)
-        unit = (new Snoo()).NewUnit();
+        unit = Snoo.NewUnit();
 
       if (entry.Value == 1)
-        unit = (new Keaton()).NewUnit();
+        unit = Keaton.NewUnit();
 
       GameObject go = Instantiate(unit.GetBody(), tileDict[entry.Key].GetPos(), Quaternion.identity, transform);
       units.Add(new BattleUnit(unit, entry.Key, entry.Value, go));
