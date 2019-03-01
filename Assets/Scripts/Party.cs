@@ -6,9 +6,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Party : MonoBehaviour {
+public static class Party {
 
-  void Start() {
+  // Persistent
+
+  private static void Start() {
     // bool loadSuccess = LoadParty(0);
     bool loadSuccess = false;
 
@@ -18,26 +20,24 @@ public class Party : MonoBehaviour {
     }
   }
 
-  void Update() {}
-
   // Party has all units
-  private int partyID;
-  private List<Unit> partyUnits;
+  private static int partyID;
+  private static List<Unit> partyUnits;
 
   // Generate Party
-  private void GenerateParty(int ID) {
-    partyID = 0;
+  public static void GenerateParty(int ID) {
+    partyID = ID;
     partyUnits = new List<Unit>();
     partyUnits.Add(Keaton.NewUnit());
   }
 
   // Get file path for party from its ID
-  private string GetFilePath(int ID) {
+  private static string GetFilePath(int ID) {
     return Application.persistentDataPath + "/party_" + ID + ".fls";
   }
 
   // Load party from file, returns success
-  private bool LoadParty(int ID) {
+  public static bool LoadParty(int ID) {
     // 0: Get file path
     string saveFilePath = GetFilePath(ID);
 
@@ -60,7 +60,7 @@ public class Party : MonoBehaviour {
   }
 
   // Save this party to a file
-  private void SaveParty() {
+  public static void SaveParty() {
     try {
       // 0: Get file path
       string saveFilePath = GetFilePath(partyID);
@@ -81,7 +81,7 @@ public class Party : MonoBehaviour {
   }
 
   // Create a party save representation of this party
-  private PartySave CreatePartySave() {
+  private static PartySave CreatePartySave() {
     PartySave save = new PartySave();
     save.partyID = partyID;
     save.partyUnits = partyUnits.ToArray();
@@ -89,32 +89,8 @@ public class Party : MonoBehaviour {
   }
 
   // Sets this party from a party save representation
-  public void SetPartyFromSave(PartySave save) {
+  private static void SetPartyFromSave(PartySave save) {
     partyID = save.partyID;
     partyUnits = new List<Unit>(save.partyUnits);
-  }
-
-  // Party controls when battles happen, is persistant
-
-  // Start a battle
-  public void StartBattle() {
-    // Disable party camera
-    // Enable wand and wand camera
-    // Load BattleGrid Scene
-  }
-
-  // End a battle
-  public void EndBattle() {
-    // Enable party camera
-    // Disable wand and wand camera
-    // Unload BattleGrid Scene
-
-    // End of battle changes to macro game
-    SaveParty();
-  }
-
-  // Party controls world menus
-  private void UpdateUI() {
-
   }
 }
